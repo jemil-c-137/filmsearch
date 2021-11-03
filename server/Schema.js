@@ -57,10 +57,10 @@ const typeDefs = gql`
   }
 
   type Query {
-    films: [Film]
-    directors: [Director]
-    genres: [Genre]
-    actors: [Actor]
+    films: [Film!]!
+    directors: [Director!]!
+    genres: [Genre!]!
+    actors: [Actor!]!
     film(slug: String!): Film
     actor(slug: String!): Actor
     director(slug: String!): Director
