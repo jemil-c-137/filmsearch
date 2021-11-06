@@ -11,6 +11,7 @@ import PageNotFound from './pages/PageNotFound';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
+
 function App() {
   return (
     <Router>
@@ -27,13 +28,13 @@ function App() {
             <Route exact path="/directors">
               <DirectorsPage />
             </Route>
-            <Route exact path="/director">
+            <Route exact path="/director/:slug">
               <DirectorPage />
             </Route>
             <Route exact path="/actors">
               <ActorsPage />
             </Route>
-            <Route exact path="/actor">
+            <Route exact path={`/actor/:slug`}>
               <ActorPage />
             </Route>
             <Route path="*">

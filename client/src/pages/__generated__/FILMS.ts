@@ -11,6 +11,7 @@ export interface FILMS_films_genre {
   __typename: "Genre";
   name: string;
   id: string;
+  slug: string;
 }
 
 export interface FILMS_films {

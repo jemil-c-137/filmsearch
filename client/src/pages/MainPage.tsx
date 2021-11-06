@@ -11,6 +11,7 @@ const MAIN_PAGE = gql`
       genre {
         name
         id
+        slug
       }
       year
       rate
