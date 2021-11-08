@@ -4,7 +4,8 @@ const { Director } = require('./resolvers/Director');
 const { Actor } = require('./resolvers/Actors');
 const { Genre } = require('./resolvers/Genres');
 const { Film } = require('./resolvers/Films');
-const { genres, actors, directors, films } = require('./db');
+const {Person} = require('./resolvers/Person')
+const { genres, actors, directors, films, persons, RolesEnum } = require('./db');
 const typeDefs = require('./Schema');
 
 const resolvers = {
@@ -12,7 +13,8 @@ const resolvers = {
   Director,
   Actor,
   Genre,
-  Film
+  Film,
+  Person
 };
 
 const context = {
@@ -20,6 +22,8 @@ const context = {
   directors,
   genres,
   actors,
+  persons,
+  RolesEnum
 };
 
 // The ApolloServer constructor requires two parameters: your schema

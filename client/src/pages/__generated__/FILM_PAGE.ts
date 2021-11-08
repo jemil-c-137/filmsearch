@@ -15,7 +15,7 @@ export interface FILM_PAGE_film_genre {
 }
 
 export interface FILM_PAGE_film_director {
-  __typename: "Director";
+  __typename: "Person";
   name: string;
   slug: string;
   image: string;
@@ -23,7 +23,7 @@ export interface FILM_PAGE_film_director {
 }
 
 export interface FILM_PAGE_film_actors {
-  __typename: "Actor";
+  __typename: "Person";
   name: string;
   slug: string;
   image: string;

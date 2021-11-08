@@ -4,18 +4,19 @@ const typeDefs = gql`
   type Film {
     id: ID!
     title: String!
-    director: Director!
+    director: Person!
     genre: [Genre!]!
     year: Int!
     rate: Float!
     description: String!
     slug: String!
     duration: Int!
-    actors: [Actor!]!
+    actors: [Person!]!
     image: String!
     yearEnd: Int
     tvShow: Boolean
     featured: Boolean
+    crew: [Roles]
   }
 
   type Director {
@@ -45,6 +46,27 @@ const typeDefs = gql`
     bio: String
   }
 
+  type Person {
+    id: ID!
+    name: String!
+    age: Int!
+    image: String!
+    slug: String!
+    bio: String
+    films: [CrewMember]!
+  }
+
+  type Roles {
+    person: Person
+    role: RolesEnum
+  }
+
+  type CrewMember {
+    film: Film
+    role: RolesEnum
+  }
+
+
   input FilmOrder {
     description: Sort
     title: Sort
@@ -56,14 +78,24 @@ const typeDefs = gql`
     desc
   }
 
+  enum RolesEnum {
+    Director
+    Actor
+    Producer
+    Operator
+    Screenwriter
+  }
+
   type Query {
     films: [Film!]!
     directors: [Director!]!
     genres: [Genre!]!
     actors: [Actor!]!
+    persons: [Person!]!
     film(slug: String!): Film
     actor(slug: String!): Actor
     director(slug: String!): Director
+    person(slug: String!): Person
   }
 `;
 
