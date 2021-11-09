@@ -7,11 +7,8 @@ import { Avatar, Box, Grid, Paper, Typography } from '@mui/material';
 import styled from '@mui/system/styled';
 import GenreList from '../components/GenreList';
 import PersonList from '../components/PersonList';
+import { StyledImage } from '../elements/StyledImage';
 
-const StyledImage = styled('img')`
-  max-width: 100%;
-  max-height: 500px;
-`;
 
 const FILM_PAGE_QUERY = gql`
   query FILM_PAGE($slug: String!) {
@@ -53,6 +50,7 @@ const Bordered = styled('div')`
 const FlexBox = styled(Box)`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 `;
 
 const Rate = styled(Typography)`
@@ -116,7 +114,7 @@ const FilmPage = () => {
           </FlexBox>
 
           <FlexBox mt={2}>
-            <>Actors: </>&nbsp; <PersonList persons={film.actors} />
+            <Typography>Actors: </Typography>&nbsp; <PersonList persons={film.actors} />
           </FlexBox>
         </Box>
       </Grid>

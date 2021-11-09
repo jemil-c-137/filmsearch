@@ -73,6 +73,8 @@ const typeDefs = gql`
     year: Sort
   }
 
+  scalar Date
+
   enum Sort {
     asc
     desc
