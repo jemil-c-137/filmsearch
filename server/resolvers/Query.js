@@ -5,6 +5,7 @@ const Query = {
   directors: (parent, args, { directors }) => directors,
   genres: (parent, args, { genres }) => genres,
   actors: (parent, args, { actors }) => actors,
+  persons: (parent, args, { persons }) => persons,
   film: (parent, args, { films }) => {
     return films.find((f) => f.slug === args.slug);
   },
