@@ -18,10 +18,12 @@ const PersonList: React.FC<IPersonListProps> = ({ persons }) => {
   return (
     <>
       {persons.map((p) => (
-        <AvatarLabel>
+        <AvatarLabel key={p.id}>
           <Avatar alt={p.name} src={p.image} style={{ marginRight: '10px' }} />
-          <Typography color="teal" >
-            <Link style={{textDecoration: "none", color: "inherit"}} to={`/${p.__typename.toLowerCase()}/${p.slug}`}>{p.name}</Link>
+          <Typography color="teal">
+            <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/${p.__typename.toLowerCase()}/${p.slug}`}>
+              {p.name}
+            </Link>
           </Typography>
         </AvatarLabel>
       ))}

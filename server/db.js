@@ -295,10 +295,7 @@ const films = [
       { person: persons[7], role: RolesEnum.actor },
       { person: persons[5], role: RolesEnum.actor },
       { person: persons[6], role: RolesEnum.actor },
-      { person: persons[2], role: RolesEnum.actor },
-      { person: persons[4], role: RolesEnum.actor },
-      { person: persons[9], role: RolesEnum.actor },
-      { person: persons[8], role: RolesEnum.actor },
+      { person: persons[3], role: RolesEnum.actor },
     ],
   },
   {

@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import React from 'react';
 import { useParams } from 'react-router';
 import { StyledImage } from '../elements/StyledImage';
-import { Person, PersonVariables, RolesEnum } from './__generated__/Person';
+import { Person, PersonVariables, Person_person_films_film, RolesEnum } from './__generated__/Person';
 
 const PERSON_QUERY = gql`
   query Person($slug: String!) {
@@ -19,6 +19,7 @@ const PERSON_QUERY = gql`
         film {
           title
           slug
+          id
         }
         role
       }
@@ -37,8 +38,14 @@ const PersonPage = () => {
   const { person } = data;
   const { films } = person;
 
-  const directedFilms = films.filter((f) => f?.role === RolesEnum.Director);
-  const actedFilms = films.filter((f) => f?.role === RolesEnum.Actor);
+  const filtered = films?.reduce((prev, current) => {
+    if (prev[current.role]) {
+      return { ...prev, [current.role]: [...prev[current.role], current.film] };
+    }
+    return { ...prev, [current.role]: [current?.film] };
+  }, {} as Record<RolesEnum, Person_person_films_film[]>);
+
+  console.log(filtered);
 
   return (
     <Grid container pr={10} pl={10} pt={10}>
@@ -56,23 +63,53 @@ const PersonPage = () => {
           <Box sx={{ padding: '15px 10px', borderTop: '1px solid #999', borderBottom: '1px solid #999' }}>
             <Typography>{person.bio}</Typography>
           </Box>
-          {actedFilms.length !== 0 && (
+          {filtered?.Actor?.length !== 0 && (
             <>
               <Box sx={{ padding: '7px 0', borderBottom: '1px solid #999' }}>
                 <Typography>Actor</Typography>
               </Box>
-              {actedFilms.map((f) => {
-                return <Typography>{f?.film?.title}</Typography>;
+              {filtered?.Actor?.map((f) => {
+                return <Typography key={f.id}>{f.title}</Typography>;
               })}
             </>
           )}
-          {directedFilms.length !== 0 && (
+          {filtered?.Director?.length !== 0 && (
             <>
               <Box sx={{ padding: '7px 0', borderBottom: '1px solid #999' }}>
                 <Typography>Director</Typography>
               </Box>
-              {directedFilms.map((f) => {
-                return <Typography>{f?.film?.title}</Typography>;
+              {filtered?.Director?.map((f) => {
+                return <Typography id={f.id}>{f.title}</Typography>;
+              })}
+            </>
+          )}
+          {filtered?.Operator?.length !== 0 && (
+            <>
+              <Box sx={{ padding: '7px 0', borderBottom: '1px solid #999' }}>
+                <Typography>Operator</Typography>
+              </Box>
+              {filtered?.Operator?.map((f) => {
+                return <Typography id={f.id}>{f.title}</Typography>;
+              })}
+            </>
+          )}
+          {filtered?.Screenwriter?.length !== 0 && (
+            <>
+              <Box sx={{ padding: '7px 0', borderBottom: '1px solid #999' }}>
+                <Typography>Screenwriter</Typography>
+              </Box>
+              {filtered?.Screenwriter?.map((f) => {
+                return <Typography id={f.id}>{f.title}</Typography>;
+              })}
+            </>
+          )}
+          {filtered?.Producer?.length !== 0 && (
+            <>
+              <Box sx={{ padding: '7px 0', borderBottom: '1px solid #999' }}>
+                <Typography>Producer</Typography>
+              </Box>
+              {filtered?.Producer?.map((f) => {
+                return <Typography id={f.id}>{f.title}</Typography>;
               })}
             </>
           )}

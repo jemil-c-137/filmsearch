@@ -53,7 +53,7 @@ const typeDefs = gql`
     image: String!
     slug: String!
     bio: String
-    films: [CrewMember]!
+    films: [CrewMember!]
   }
 
   type Roles {
@@ -62,8 +62,8 @@ const typeDefs = gql`
   }
 
   type CrewMember {
-    film: Film
-    role: RolesEnum
+    film: Film!
+    role: RolesEnum!
   }
 
 

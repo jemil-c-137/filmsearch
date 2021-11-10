@@ -3,30 +3,30 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-
 // ====================================================
 // GraphQL query operation: Person
 // ====================================================
 
 export interface Person_person_films_film {
-  __typename: "Film";
+  __typename: 'Film';
   title: string;
   slug: string;
+  id: string;
 }
 
 export interface Person_person_films {
-  __typename: "CrewMember";
-  film: Person_person_films_film | null;
-  role: RolesEnum | null;
+  __typename: 'CrewMember';
+  film: Person_person_films_film;
+  role: RolesEnum;
 }
 
 export interface Person_person {
-  __typename: "Person";
+  __typename: 'Person';
   name: string;
   age: number;
   image: string;
   bio: string | null;
-  films: (Person_person_films | null)[];
+  films: Person_person_films[] | null;
 }
 
 export interface Person {
@@ -38,9 +38,9 @@ export interface PersonVariables {
 }
 
 export enum RolesEnum {
-  Actor = "Actor",
-  Director = "Director",
-  Operator = "Operator",
-  Producer = "Producer",
-  Screenwriter = "Screenwriter",
+  Actor = 'Actor',
+  Director = 'Director',
+  Operator = 'Operator',
+  Producer = 'Producer',
+  Screenwriter = 'Screenwriter',
 }

@@ -17,8 +17,8 @@ const GenreList: React.FC<IGenreListProps> = ({ genres }) => {
   return (
     <>
       {genres.map((g) => (
-        <ListItem>
-          <Chip key={g.id} label={g.name} color="primary" variant="outlined" />
+        <ListItem key={g.id}>
+          <Chip label={g.name} color="primary" variant="outlined" />
         </ListItem>
       ))}
     </>
