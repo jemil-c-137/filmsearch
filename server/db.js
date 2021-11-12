@@ -326,5 +326,5 @@ module.exports = {
   genres,
   directors,
   persons,
-  RolesEnum
+  RolesEnum,
 };
