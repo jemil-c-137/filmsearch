@@ -28,87 +28,87 @@ const persons = [
   {
     id: '501',
     name: 'Justin Roiland',
-    age: 41,
     image:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Justin_Roiland_%2836434635662%29.jpg/800px-Justin_Roiland_%2836434635662%29.jpg',
     slug: 'justin-roiland',
     bio: "Martin Justin Roiland is an American voice actor, animator, writer, producer, and director. He is best known as the co-creator of Adult Swim's Rick and Morty and its subsequent franchise, on which he voices the show's title characters Rick Sanchez and Morty Smith, and as the co-creator of Hulu's Solar Opposites, in which he voices the main character, Korvo. He has also played Earl of Lemongrab on Adventure Time and Blendin Blandin on Gravity Falls. He founded the animation studio Justin Roiland's Solo Vanity Card Productions! and the video game studio Squanch Games.",
+    birthDate: '21.02.1980',
   },
   {
     id: '502',
     name: directorsEnum.QuentinTarantino,
     slug: 'quentin-tarantino',
-    age: 58,
     image:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Quentin_Tarantino_by_Gage_Skidmore.jpg/1200px-Quentin_Tarantino_by_Gage_Skidmore.jpg',
     bio: 'Quentin Jerome Tarantino is an American film director, screenwriter, producer, author, film critic, and actor. His films are characterized by nonlinear storylines, dark humor, stylized violence, extended dialogue, ensemble casts, references to popular culture, alternate history, and neo-noir.',
+    birthDate: '27.05.1963',
   },
   {
     id: '503',
     name: directorsEnum.MartinBrest,
     slug: 'martin-brest',
-    age: 70,
     image:
       'https://m.media-amazon.com/images/M/MV5BOTRlN2UwNTEtNTI3OS00ZmYwLTk0NzktODViNjUxZjdjYTZlXkEyXkFqcGdeQXVyMjA0MTYzNzI@._V1_.jpg',
+    birthDate: '08.08.1951',
   },
   {
     id: '504',
     name: ActorsEnum.SamuelLJackson,
     slug: 'samuel-l-jackson',
-    age: 72,
     image:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Samuel_L._Jackson_2019_by_Glenn_Francis.jpg/800px-Samuel_L._Jackson_2019_by_Glenn_Francis.jpg',
     bio: 'is an American actor and producer. Widely regarded as one of the most popular actors of his generation, the films in which he has appeared have collectively grossed over $27 billion worldwide, making him the highest-grossing actor of all time (when cameo appearances are excluded).',
+    birthDate: '21.12.1948',
   },
   {
     id: '505',
     name: ActorsEnum.DanHarmon,
     slug: 'dan-harmon',
-    age: 48,
     image:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Dan_Harmon_%2814790686643%29.jpg/1024px-Dan_Harmon_%2814790686643%29.jpg',
     bio: 'is an American writer, producer, actor and comedian',
+    birthDate: '03.01.1973',
   },
   {
     id: '506',
     name: ActorsEnum.JohnTravolta,
     slug: 'john-travolta',
-    age: 67,
     image: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/John_Travolta_Cannes_2018_%28cropped%29.jpg',
     bio: 'John Travolta is an American actor, singer and prominent Scientologist.',
+    birthDate: '18.02.1954',
   },
   {
     id: '507',
     name: ActorsEnum.BruceWillis,
     slug: 'bruce-willis',
-    age: 66,
     image:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Bruce_Willis_by_Gage_Skidmore_3.jpg/800px-Bruce_Willis_by_Gage_Skidmore_3.jpg',
-    bio: 'Bruce Willis s an American actor. Born in Germany to a German mother and American father, Willis moved to the U.S. with his family when he was two years old. His career began on the off-Broadway stage in the 1970s.',
+    bio: 'Bruce Willis is an American actor. Born in Germany to a German mother and American father, Willis moved to the U.S. with his family when he was two years old. His career began on the off-Broadway stage in the 1970s.',
+    birthDate: '19.05.1955',
   },
   {
     id: '508',
     name: ActorsEnum.UmaTurman,
     slug: 'uma-thurman',
-    age: 51,
     image: 'https://upload.wikimedia.org/wikipedia/commons/4/42/Uma_Thurman_Cannes_2017_%28cropped%29.jpg',
     bio: 'Uma Thurman is an American actress, writer, producer and model..',
+    birthDate: '29.04.1970',
   },
   {
     id: '509',
     name: ActorsEnum.ALPacino,
     slug: 'al-pacino',
-    age: 81,
     image: 'https://pyxis.nymag.com/v1/imgs/bc9/ccb/936534d0b82b77cf0ffbac92010ee38ea3-06-al-pacino.2x.h600.w512.jpg',
     bio: 'Al Pacino is an American actor and filmmaker. In a career spanning over five decades, he has received many awards and nominations, including an Academy Award, two Tony Awards, and two Primetime Emmy Awards',
+    birthDate: '25.04.1940',
   },
   {
     id: '510',
     name: ActorsEnum.ChrisODonnell,
     slug: 'chris-o-donnell',
-    age: 51,
     image: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Chris_ODonnell_Max_Payne_2008.jpg',
     bio: "Chris O'Donnell is an American actor and former model",
+    birthDate: '26.07.1970',
   },
 ];
 

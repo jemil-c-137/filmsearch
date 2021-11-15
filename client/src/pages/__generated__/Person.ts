@@ -23,7 +23,7 @@ export interface Person_person_films {
 export interface Person_person {
   __typename: 'Person';
   name: string;
-  age: number;
+  birthDate: string;
   image: string;
   bio: string | null;
   films: Person_person_films[] | null;
