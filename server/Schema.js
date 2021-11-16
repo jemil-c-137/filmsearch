@@ -49,7 +49,7 @@ const typeDefs = gql`
   type Person {
     id: ID!
     name: String!
-    age: Int!
+    birthDate: String!
     image: String!
     slug: String!
     bio: String
@@ -73,7 +73,6 @@ const typeDefs = gql`
     year: Sort
   }
 
-  scalar Date
 
   enum Sort {
     asc

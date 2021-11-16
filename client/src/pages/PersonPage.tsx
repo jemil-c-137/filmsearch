@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { borderBottom } from '@mui/system';
 import gql from 'graphql-tag';
 import React from 'react';
 import { useParams } from 'react-router';
@@ -19,7 +20,7 @@ const PERSON_QUERY = gql`
   query Person($slug: String!) {
     person(slug: $slug) {
       name
-      age
+      birthDate
       image
       bio
       films {
@@ -99,6 +100,9 @@ const PersonPage = () => {
         <Box>
           <Typography variant="h2" component="h2" color="primary">
             {person.name}
+          </Typography>
+          <Typography sx={{borderBottom: "1px solid #999", marginBottom: "10px"}} variant="h6" component="h2" color="primary">
+            {person.birthDate}
           </Typography>
           <Typography color="secondary" variant="body1">
             Biography
