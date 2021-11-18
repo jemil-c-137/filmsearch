@@ -52,7 +52,7 @@ const typeDefs = gql`
     birthDate: String!
     image: String!
     slug: String!
-    bio: String
+    bio: String!
     films: [CrewMember!]
   }
 
@@ -97,6 +97,17 @@ const typeDefs = gql`
     actor(slug: String!): Actor
     director(slug: String!): Director
     person(slug: String!): Person
+  }
+
+  input CreatePersonInput {
+    name: String!
+    birthDate: String!
+    image: String!
+    bio: String!
+  }
+
+  type Mutation {
+    addPerson(input: CreatePersonInput!): Person
   }
 `;
 

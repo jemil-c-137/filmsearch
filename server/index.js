@@ -4,7 +4,8 @@ const { Director } = require('./resolvers/Director');
 const { Actor } = require('./resolvers/Actors');
 const { Genre } = require('./resolvers/Genres');
 const { Film } = require('./resolvers/Films');
-const {Person} = require('./resolvers/Person')
+const {Person} = require('./resolvers/Person');
+const {Mutation} = require('./resolvers/Mutation');
 const { genres, actors, directors, films, persons, RolesEnum } = require('./db');
 const typeDefs = require('./Schema');
 
@@ -14,7 +15,8 @@ const resolvers = {
   Actor,
   Genre,
   Film,
-  Person
+  Person,
+  Mutation
 };
 
 const context = {
