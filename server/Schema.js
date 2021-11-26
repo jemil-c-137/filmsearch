@@ -66,13 +66,11 @@ const typeDefs = gql`
     role: RolesEnum!
   }
 
-
   input FilmOrder {
     description: Sort
     title: Sort
     year: Sort
   }
-
 
   enum Sort {
     asc
