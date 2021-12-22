@@ -104,8 +104,29 @@ const typeDefs = gql`
     bio: String!
   }
 
+  type Success {
+    isSuccess: Boolean
+  }
+
+  input CreateFilmInput {
+    title: String!
+    year: Int!
+    rate: Float!
+    description: String!
+    slug: String!
+    duration: Int!
+    image: String!
+    yearEnd: Int
+    tvShow: Boolean
+    featured: Boolean
+    director: ID
+    actors: [ID]
+  }
+
   type Mutation {
     addPerson(input: CreatePersonInput!): Person
+    addFilm(input: CreateFilmInput): Success
+    addGenre(name: String): Success
   }
 `;
 
