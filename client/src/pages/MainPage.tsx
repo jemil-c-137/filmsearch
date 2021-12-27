@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery, gql } from '@apollo/client';
 import FilmsList from '../components/FilmsList';
 import { FILMS } from './__generated__/FILMS';
+import AddFilmForm from '../components/AddFilmForm';
 
 const MAIN_PAGE = gql`
   query FILMS {
@@ -27,9 +28,11 @@ const MainPage = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
-  if (!data?.films) return <div>No data</div>
+  if (!data?.films) return <div>No data</div>;
 
-  return <div>{data?.films && <FilmsList films={data?.films} />}</div>;
+  return <div>
+    <AddFilmForm />
+    {data?.films && <FilmsList films={data?.films} />}</div>;
 };
 
 export default MainPage;
