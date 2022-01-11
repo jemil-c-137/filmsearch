@@ -2,12 +2,12 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useQuery, gql } from '@apollo/client';
-import { FILM_PAGEVariables, FILM_PAGE } from './__generated__/FILM_PAGE';
 import { Avatar, Box, Grid, Paper, Typography } from '@mui/material';
 import styled from '@mui/system/styled';
 import GenreList from '../components/GenreList';
 import PersonList from '../components/PersonList';
 import { StyledImage } from '../elements/StyledImage';
+import { FILM_PAGE, FILM_PAGEVariables } from '../interfaces/FILM_PAGE';
 
 
 const FILM_PAGE_QUERY = gql`

@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FILM_PAGE_film_actors, FILM_PAGE_film_director } from '../pages/__generated__/FILM_PAGE';
+import { FILM_PAGE_film_actors, FILM_PAGE_film_director } from '../interfaces/FILM_PAGE';
 
 const AvatarLabel = styled('div')`
   display: flex;

@@ -31,7 +31,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "types": "npx apollo service:download --endpoint=http://localhost:4000/ graphql-schema.json && npx apollo codegen:generate --localSchemaFile=graphql-schema.json --target=typescript --tagName=gql"
+    "types": "npx apollo service:download --endpoint=http://localhost:4000/graphql graphql-schema.json && npx apollo codegen:generate src/interfaces --outputFlat --localSchemaFile=graphql-schema.json --target=typescript --tagName=gql"
   },
   "eslintConfig": {
     "extends": [

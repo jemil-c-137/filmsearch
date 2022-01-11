@@ -1,19 +1,14 @@
+import React from 'react';
 import { useQuery } from '@apollo/client';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import gql from 'graphql-tag';
-import React from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { StyledImage } from '../elements/StyledImage';
-import {
-  Person,
-  PersonVariables,
-  Person_person_films,
-  Person_person_films_film,
-  RolesEnum,
-} from './__generated__/Person';
+import { RolesEnum } from '../interfaces/globalTypes';
+import { Person, PersonVariables, Person_person_films, Person_person_films_film } from '../interfaces/Person';
 
 const PERSON_QUERY = gql`
   query Person($slug: String!) {

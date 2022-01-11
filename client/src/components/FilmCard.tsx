@@ -7,10 +7,10 @@ import CardContent from '@mui/material/CardContent';
 
 import Typography from '@mui/material/Typography';
 
-import { FILMS_films } from '../pages/__generated__/FILMS';
 import { styled, Theme } from '@mui/material/styles';
 import { useHistory } from 'react-router-dom';
 import GenreList from './GenreList';
+import { FILMS_films } from '../interfaces/FILMS';
 
 
 const FilmCard: React.FC<FILMS_films> = ({ title, image, rate, genre, duration, year, slug }) => {
