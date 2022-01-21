@@ -31,7 +31,7 @@ export interface CreateFilmInput {
 export interface CreatePersonInput {
   name: string;
   birthDate: string;
-  image: string;
+  image: any;
   bio: string;
 }
 

@@ -1,11 +1,20 @@
+const { GenresCollection } = require('../models/Genre');
+const { PersonCollection } = require('../models/Persons');
+
 const Query = {
   films: (parent, args, { films }) => {
-    return films
+    return films;
   },
   directors: (parent, args, { directors }) => directors,
-  genres: (parent, args, { genres }) => genres,
+  genres: async () => {
+    const allGenres = await GenresCollection.find();
+    return allGenres;
+  },
   actors: (parent, args, { actors }) => actors,
-  persons: (parent, args, { persons }) => persons,
+  persons: async () => {
+    const allPersons = await PersonCollection.find();
+    return allPersons;
+  },
   person: (parent, args, { persons }) => {
     return persons.find((p) => p.slug === args.slug);
   },
