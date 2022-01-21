@@ -1,7 +1,7 @@
 export interface PersonOptionType {
   name: string;
-  image: string;
-  birthDate: string;
+  image: File[];
+  birthDate: Date;
   bio: string;
   inputValue?: string;
 }

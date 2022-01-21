@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Paper, TextField, Typography } from '@mui/material';
-import { FormProvider, useForm, Controller } from 'react-hook-form';
-import { FormInputText, Modal } from '../elements';
+import { useForm, Controller } from 'react-hook-form';
+import { Modal } from '../elements';
 import Rating from '@mui/material/Rating';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -10,60 +10,56 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 
-import { FormInputDropdown } from './FormInputDropdown';
-import FormInputRadio from './FormInputRadio';
 import Stack from '@mui/material/Stack';
 import { gql, useMutation } from '@apollo/client';
+import { IForm } from '../interfaces/types';
+import AddPersonForm from './AddPersonForm';
+import PersonsFields from './PersonsFields/PersonsFields';
 
 const defaultValues = {
   title: '',
-  duration: 0,
+  duration: '',
   description: '',
-  rate: 0,
-  isTvShow: false,
+  rate: '',
+  tvShow: false,
   year: new Date(),
   image: undefined,
 };
 
-interface IForm {
-  title: string;
-  duration: number;
-  description: string;
-  rate: number;
-  isTvShow: boolean;
-  year: Date;
-  image: File[];
-}
-
 const TEST_MUTATION = gql`
-  mutation Mutation($file: Upload!) {
-    fileUpload(file: $file) {
+  mutation Mutation($input: CreateFilmInput) {
+    addFilm(input: $input) {
       isSuccess
     }
   }
 `;
 
+
 const AddFilmForm = () => {
   const { handleSubmit, control, register } = useForm<IForm>({ defaultValues });
 
-  const [fileUpload, { data, loading, error }] = useMutation(TEST_MUTATION);
+  const [openPersonDialog, toggleOpenPersonDialog] = useState(false);
 
-  const onSubmit = (data: IForm) => {
-    console.log(data, 'file');
-    fileUpload({ variables: { file: data } })
+  const [addFilm, { data, loading, error }] = useMutation(TEST_MUTATION);
+
+  const onSubmit = async (data: IForm) => {
+
+    const file = data.image[0];
+
+
+    const payload = {
+      ...data,
+      duration: parseInt(data.duration),
+      rate: parseFloat(data.rate),
+      year: data.year.getFullYear(),
+      image: file,
+    };
+    addFilm({ variables: { input: payload } })
       .then((res) => console.log('response success', res))
       .catch((res) => console.log('response error', res));
   };
 
-  /*   const onChange = ({
-    target: {
-      validity,
-      files: [file],
-    },
-  }: any) => {
-    console.log(file, 'file');
-    validity.valid && fileUpload({ variables: { file } })
-  }; */
+  const closePersonForm = () => toggleOpenPersonDialog(false);
 
   return (
     <Paper>
@@ -89,7 +85,7 @@ const AddFilmForm = () => {
                   onChange={onChange}
                   value={value}
                   fullWidth
-                  label={'Movie title'}
+                  label="Movie title"
                   variant="outlined"
                 />
               )}
@@ -158,7 +154,7 @@ const AddFilmForm = () => {
               />
             </Stack>
             <Controller
-              name="isTvShow"
+              name="tvShow"
               control={control}
               render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                 <FormGroup>
@@ -176,18 +172,22 @@ const AddFilmForm = () => {
                     label="Release year"
                     value={value}
                     onChange={onChange}
+                    maxDate={new Date()}
                     renderInput={(params) => <TextField {...params} helperText={null} />}
                   />
                 </LocalizationProvider>
               )}
             />
 
-            <input type="file" multiple={true} {...register('image')} /* onChange={onChange} */ />
+            <input type="file" multiple={true} {...register('image')} />
+
+            <PersonsFields toggleOpen={toggleOpenPersonDialog} />
           </Stack>
           <Button color="secondary" type="submit" variant="contained">
             Save
           </Button>
         </form>
+        <AddPersonForm open={openPersonDialog} handleClose={closePersonForm} />
       </Modal>
     </Paper>
   );
