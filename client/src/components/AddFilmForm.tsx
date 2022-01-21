@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Paper, TextField, Typography } from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
-import { Modal } from '../elements';
+import { FormProvider, useForm, Controller } from 'react-hook-form';
+import { FormInputText, Modal } from '../elements';
 import Rating from '@mui/material/Rating';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
