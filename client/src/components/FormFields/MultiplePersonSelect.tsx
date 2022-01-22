@@ -3,22 +3,22 @@ import TextField from '@mui/material/TextField';
 
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { PersonOptionType } from '../../interfaces/types';
-import { GetAllPersons_persons } from '../../interfaces/GetAllPersons';
+import { FormFieldsValues_persons } from '../../interfaces/FormFieldsValues';
 
 export type IPersonSelect = Omit<PersonOptionType, 'image'>;
 
-const filter = createFilterOptions<IPersonSelect | GetAllPersons_persons>();
+const filter = createFilterOptions<IPersonSelect | FormFieldsValues_persons>();
 
 interface IPersonSelectProps {
   toggleOpen: (isOpen: boolean) => void;
-  persons: GetAllPersons_persons[];
+  persons: FormFieldsValues_persons[];
 }
 
 const MultiplePersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons }) => {
-  const [value, setValue] = React.useState<(GetAllPersons_persons | IPersonSelect)[]>([]);
+  const [value, setValue] = React.useState<(FormFieldsValues_persons | IPersonSelect)[]>([]);
 
-  const isExistingPersonTypeGuard = (obj: GetAllPersons_persons | IPersonSelect): obj is PersonOptionType => {
-    return (obj as GetAllPersons_persons).id === undefined;
+  const isExistingPersonTypeGuard = (obj: FormFieldsValues_persons | IPersonSelect): obj is PersonOptionType => {
+    return (obj as FormFieldsValues_persons).id === undefined;
   };
 
   const [dialogValue, setDialogValue] = React.useState<IPersonSelect>({

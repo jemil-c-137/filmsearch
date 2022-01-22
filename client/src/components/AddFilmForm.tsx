@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Paper, TextField, Typography } from '@mui/material';
-import { FormProvider, useForm, Controller } from 'react-hook-form';
-import { FormInputText, Modal } from '../elements';
+import { useForm, Controller } from 'react-hook-form';
+import { Modal } from '../elements';
 import Rating from '@mui/material/Rating';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -14,7 +14,7 @@ import Stack from '@mui/material/Stack';
 import { gql, useMutation } from '@apollo/client';
 import { IForm } from '../interfaces/types';
 import AddPersonForm from './AddPersonForm';
-import PersonsFields from './PersonsFields/PersonsFields';
+import PersonsFields from './FormFields/FormSelects';
 
 const defaultValues = {
   title: '',
@@ -34,7 +34,6 @@ const TEST_MUTATION = gql`
   }
 `;
 
-
 const AddFilmForm = () => {
   const { handleSubmit, control, register } = useForm<IForm>({ defaultValues });
 
@@ -43,9 +42,7 @@ const AddFilmForm = () => {
   const [addFilm, { data, loading, error }] = useMutation(TEST_MUTATION);
 
   const onSubmit = async (data: IForm) => {
-
     const file = data.image[0];
-
 
     const payload = {
       ...data,
