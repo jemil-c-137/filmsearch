@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 
 import { Link, useHistory } from 'react-router-dom';
 import GenreList from './GenreList';
-import { Films_films } from '../interfaces/Filmss';
+import { Films_films } from '../interfaces/Films';
 
 const FilmCard: React.FC<Films_films> = ({ title, image, rate, genres, duration, year, slug, id }) => {
 

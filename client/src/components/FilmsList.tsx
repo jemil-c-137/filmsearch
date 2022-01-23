@@ -3,7 +3,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import FilmCard from './FilmCard';
-import { Films } from '../interfaces/Filmss';
+import { Films } from '../interfaces/Films';
 
 interface IFilmsListProps extends Films {}
 

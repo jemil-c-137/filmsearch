@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery, gql } from '@apollo/client';
 import FilmsList from '../components/FilmsList';
 import AddFilmForm from '../components/AddFilmForm';
-import { Films } from '../interfaces/Filmss';
+import { Films } from '../interfaces/Films';
 
 const ALL_FILMS = gql`
   query Films {
