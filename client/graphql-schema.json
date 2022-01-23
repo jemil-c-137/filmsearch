@@ -75,7 +75,7 @@
             "deprecationReason": null
           },
           {
-            "name": "genre",
+            "name": "genres",
             "description": null,
             "args": [],
             "type": {
@@ -774,18 +774,38 @@
             "deprecationReason": null
           },
           {
-            "name": "films",
+            "name": "directed",
             "description": null,
             "args": [],
             "type": {
-              "kind": "LIST",
+              "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "NON_NULL",
+                "kind": "LIST",
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "CrewMember",
+                  "name": "Film",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "acted",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Film",
                   "ofType": null
                 }
               }
@@ -1184,14 +1204,14 @@
             "description": null,
             "args": [
               {
-                "name": "slug",
+                "name": "id",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "ID",
                     "ofType": null
                   }
                 },
@@ -1271,14 +1291,14 @@
             "description": null,
             "args": [
               {
-                "name": "slug",
+                "name": "id",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "ID",
                     "ofType": null
                   }
                 },
@@ -1558,6 +1578,22 @@
           },
           {
             "name": "actors",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "genres",
             "description": null,
             "type": {
               "kind": "LIST",

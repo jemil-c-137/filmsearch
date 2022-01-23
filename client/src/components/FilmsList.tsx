@@ -1,16 +1,13 @@
 import React from 'react';
 
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import FilmCard from './FilmCard';
-import { FILMS } from '../interfaces/FILMS';
+import { Films } from '../interfaces/Films';
 
-interface IFilmsListProps extends FILMS {}
+interface IFilmsListProps extends Films {}
 
 const FilmsList: React.FC<IFilmsListProps> = ({ films }) => {
-
   return (
     <Box mt={10} sx={{ flexGrow: 1 }}>
       <Grid container spacing={10} pr={4} pl={4}>

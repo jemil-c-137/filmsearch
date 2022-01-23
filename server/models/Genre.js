@@ -9,6 +9,10 @@ const GenreSchema = new Schema({
   slug: {
     type: String,
     required: true
+  },
+  films: {
+    type: [mongoose.SchemaTypes.ObjectId],
+    ref: "Film"
   }
 })
 

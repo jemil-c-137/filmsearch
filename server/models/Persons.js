@@ -8,7 +8,7 @@ const PersonSchema = new Schema({
     required: true
   },
   birthDate: {
-    type: String,
+    type: Date,
     required: true
   },
   image: {

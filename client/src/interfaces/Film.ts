@@ -4,17 +4,17 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: FILM_PAGE
+// GraphQL query operation: Film
 // ====================================================
 
-export interface FILM_PAGE_film_genre {
+export interface Film_film_genres {
   __typename: "Genre";
   name: string;
   slug: string;
   id: string;
 }
 
-export interface FILM_PAGE_film_director {
+export interface Film_film_director {
   __typename: "Person";
   name: string;
   slug: string;
@@ -22,7 +22,7 @@ export interface FILM_PAGE_film_director {
   id: string;
 }
 
-export interface FILM_PAGE_film_actors {
+export interface Film_film_actors {
   __typename: "Person";
   name: string;
   slug: string;
@@ -30,7 +30,7 @@ export interface FILM_PAGE_film_actors {
   id: string;
 }
 
-export interface FILM_PAGE_film {
+export interface Film_film {
   __typename: "Film";
   title: string;
   year: number;
@@ -38,17 +38,17 @@ export interface FILM_PAGE_film {
   rate: number;
   duration: number;
   image: string;
-  genre: FILM_PAGE_film_genre[];
-  director: FILM_PAGE_film_director;
-  actors: FILM_PAGE_film_actors[];
+  genres: Film_film_genres[];
+  director: Film_film_director;
+  actors: Film_film_actors[];
   tvShow: boolean | null;
   yearEnd: number | null;
 }
 
-export interface FILM_PAGE {
-  film: FILM_PAGE_film | null;
+export interface Film {
+  film: Film_film | null;
 }
 
-export interface FILM_PAGEVariables {
-  slug: string;
+export interface FilmVariables {
+  id: string;
 }
