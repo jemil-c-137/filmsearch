@@ -4,6 +4,7 @@ import FilmsList from '../components/FilmsList';
 import AddFilmForm from '../components/AddFilmForm';
 import { Films } from '../interfaces/Films';
 
+
 const ALL_FILMS = gql`
   query Films {
     films {

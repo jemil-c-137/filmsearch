@@ -37,6 +37,7 @@ const ADD_FILM_MUTATION = gql`
   }
 `;
 
+
 const AddFilmForm = () => {
   const { handleSubmit, control, register } = useForm<IForm>({ defaultValues });
 

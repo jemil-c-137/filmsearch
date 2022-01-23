@@ -1,5 +1,6 @@
 import { FormFieldsValues_genres } from "./FormFieldsValues";
 
+
 export interface PersonOptionType {
   name: string;
   image: File[];

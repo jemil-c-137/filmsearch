@@ -84,6 +84,7 @@ const PersonPage = () => {
             color="primary">
             {format(new Date(person.birthDate), 'dd MMM yyyy')} (
             {`${differenceInCalendarYears(new Date(), new Date(person.birthDate))} years`})
+
           </Typography>
           <Typography color="secondary" variant="body1">
             Biography
