@@ -2,7 +2,7 @@ import Chip from '@mui/material/Chip';
 import { styled, Theme } from '@mui/material/styles';
 import React from 'react';
 import { Film_film_genres } from '../interfaces/Film';
-import { Films_films_genres } from '../interfaces/Films';
+import { Films_films_genres } from '../interfaces/Filmss';
 
 const ListItem = styled('div')(({ theme }: { theme: Theme }) => ({
   margin: theme.spacing(0.5),
