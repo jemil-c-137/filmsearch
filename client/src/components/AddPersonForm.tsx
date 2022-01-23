@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import { TPerson } from '../interfaces/types';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation, gql } from '@apollo/client';
-import { QUERY_PERSONS } from './PersonsFields/PersonsFields';
+import { QUERY_FORM_SELECTS } from './FormFields/FormSelects';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
@@ -41,7 +41,9 @@ interface IAddPersonFormProps {
 const AddPersonForm: React.FC<IAddPersonFormProps> = ({ open, handleClose }) => {
   const { handleSubmit, control, register } = useForm<TPerson>({ defaultValues });
 
-  const [addPerson, { data, loading, error }] = useMutation(ADD_PERSON, { refetchQueries: [{ query: QUERY_PERSONS }] });
+  const [addPerson, { data, loading, error }] = useMutation(ADD_PERSON, {
+    refetchQueries: [{ query: QUERY_FORM_SELECTS }],
+  });
 
   const onSubmit = (data: TPerson) => {
     const date = data.birthDate.toISOString();
@@ -50,7 +52,7 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ open, handleClose }) => 
     const payload = {
       ...data,
       image: file,
-      birthDate: date
+      birthDate: date,
     };
 
     addPerson({ variables: { input: payload } })
@@ -60,7 +62,7 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ open, handleClose }) => 
       .catch((err) => {
         console.log(err);
         handleClose();
-      }); 
+      });
   };
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -81,6 +83,7 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ open, handleClose }) => 
               <TextField
                 helperText={error ? error.message : null}
                 autoFocus
+                error={!!error}
                 margin="dense"
                 value={value}
                 onChange={onChange}
@@ -118,6 +121,7 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ open, handleClose }) => 
               <TextField
                 helperText={error ? error.message : null}
                 autoFocus
+                error={!!error}n
                 margin="dense"
                 value={value}
                 onChange={onChange}

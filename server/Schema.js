@@ -1,11 +1,14 @@
 const { gql } = require('apollo-server');
+const { Upload } = require('graphql-upload');
 
 const typeDefs = gql`
+  scalar Upload
+
   type Film {
     id: ID!
     title: String!
     director: Person!
-    genre: [Genre!]!
+    genres: [Genre!]!
     year: Int!
     rate: Float!
     description: String!
@@ -53,7 +56,8 @@ const typeDefs = gql`
     image: String!
     slug: String!
     bio: String!
-    films: [CrewMember!]
+    directed: [Film]!
+    acted: [Film]!
   }
 
   type Roles {
@@ -64,6 +68,12 @@ const typeDefs = gql`
   type CrewMember {
     film: Film!
     role: RolesEnum!
+  }
+
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
   }
 
   input FilmOrder {
@@ -91,21 +101,22 @@ const typeDefs = gql`
     genres: [Genre!]!
     actors: [Actor!]!
     persons: [Person!]!
-    film(slug: String!): Film
+    film(id: ID!): Film
     actor(slug: String!): Actor
     director(slug: String!): Director
-    person(slug: String!): Person
+    person(id: ID!): Person
+    uploads: [File]
   }
 
   input CreatePersonInput {
     name: String!
     birthDate: String!
-    image: String!
+    image: Upload!
     bio: String!
   }
 
   type Success {
-    isSuccess: Boolean
+    isSuccess: Upload
   }
 
   input CreateFilmInput {
@@ -113,20 +124,21 @@ const typeDefs = gql`
     year: Int!
     rate: Float!
     description: String!
-    slug: String!
     duration: Int!
-    image: String!
+    image: Upload!
     yearEnd: Int
     tvShow: Boolean
-    featured: Boolean
     director: ID
     actors: [ID]
+    genres: [ID]
   }
 
   type Mutation {
     addPerson(input: CreatePersonInput!): Person
-    addFilm(input: CreateFilmInput): Success
+    addFilm(input: CreateFilmInput): Success!
     addGenre(name: String): Success
+    testMutation(text: String): String
+    fileUpload(file: Upload!): Success
   }
 `;
 

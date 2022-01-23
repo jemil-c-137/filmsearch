@@ -4,85 +4,67 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import gql from 'graphql-tag';
-import { useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import { StyledImage } from '../elements/StyledImage';
-import { RolesEnum } from '../interfaces/globalTypes';
-import { Person, PersonVariables, Person_person_films, Person_person_films_film } from '../interfaces/Person';
+import { Person, PersonVariables, Person_person_acted, Person_person_directed } from '../interfaces/Person';
+import { format, differenceInCalendarYears } from 'date-fns';
 
 const PERSON_QUERY = gql`
-  query Person($slug: String!) {
-    person(slug: $slug) {
+  query Person($id: ID!) {
+    person(id: $id) {
       name
       birthDate
       image
       bio
-      films {
-        film {
-          title
-          slug
-          id
-        }
-        role
+      acted {
+        title
+        id
+        slug
+      }
+      directed {
+        title
+        id
+        slug
       }
     }
   }
 `;
 
+type PersonFilms = (Person_person_directed | Person_person_acted | null)[];
+
 const PersonPage = () => {
-  const { slug } = useParams<PersonVariables>();
-  const { error, data, loading } = useQuery<Person>(PERSON_QUERY, { variables: { slug } });
+  const {
+    state: { id },
+  } = useLocation<{ id: string }>();
+  const { error, data, loading } = useQuery<Person>(PERSON_QUERY, { variables: { id } });
 
   if (error) return <div> ...error</div>;
   if (loading) return <div>...loading</div>;
   if (!data || !data.person) return <div> ...no data</div>;
 
   const { person } = data;
-  const { films } = person;
 
-  const renderFilms = () => {
-    if (!films) return <div>no films</div>;
-    const filmsCopy = [...films];
+  const { directed, acted } = person;
 
-    // sort films by role
-    const sortedFilms = filmsCopy.sort((a, b) => (a.role >= b.role ? 1 : -1));
-    type f = { role: RolesEnum; films: Person_person_films_film[] }[];
-
-    //since array sorted by roles, no need to search role index, only last role can match with current
-    const rolesFilmList = sortedFilms?.reduce((prev: f, current: Person_person_films) => {
-      if (prev.length !== 0 && prev[prev.length - 1].role === current.role) {
-        const updatedFilms = [...prev[prev.length - 1].films, current.film];
-
-        return [...prev.slice(0, prev.length - 1), { role: current.role, films: updatedFilms }];
-      }
-
-      const newFilm = { role: current.role, films: [current.film] };
-      return [...prev, newFilm];
-    }, []);
-
-    return (
-      <>
-        {rolesFilmList.map(
-          (role) =>
-            role.films.length > 0 && (
-              <>
-                <Box key={role.role} sx={{ padding: '7px 0', borderBottom: '1px solid #999' }}>
-                  <Typography color="secondary">{role.role}</Typography>
-                </Box>
-                {role.films.map((f) => {
-                  return (
-                    <Typography pl={1} key={f.id}>
-                      <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/film/${f.slug}`}>
-                        {f.title}
-                      </Link>
-                    </Typography>
-                  );
-                })}
-              </>
-            ),
-        )}
-      </>
-    );
+  const renderFilms = (films: PersonFilms) => {
+    return films.map((film) => {
+      if (!film) return null;
+      return (
+        <Typography pl={1} key={film.id}>
+          <Link
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            to={{
+              pathname: `/film/${film.slug}`,
+              state: {
+                id: film.id,
+              },
+            }}>
+            {film.title}
+          </Link>
+        </Typography>
+      );
+    });
   };
 
   return (
@@ -95,8 +77,14 @@ const PersonPage = () => {
           <Typography variant="h2" component="h2" color="primary">
             {person.name}
           </Typography>
-          <Typography sx={{borderBottom: "1px solid #999", marginBottom: "10px"}} variant="h6" component="h2" color="primary">
-            {person.birthDate}
+          <Typography
+            sx={{ borderBottom: '1px solid #999', marginBottom: '10px' }}
+            variant="h6"
+            component="h2"
+            color="primary">
+            {format(new Date(person.birthDate), 'dd MMM yyyy')} (
+            {`${differenceInCalendarYears(new Date(), new Date(person.birthDate))} years`})
+
           </Typography>
           <Typography color="secondary" variant="body1">
             Biography
@@ -104,7 +92,14 @@ const PersonPage = () => {
           <Box sx={{ padding: '15px 10px', borderTop: '1px solid #999', borderBottom: '1px solid #999' }}>
             <Typography>{person.bio}</Typography>
           </Box>
-          <>{renderFilms()}</>
+          <Box sx={{ padding: '7px 0', borderBottom: '1px solid #999' }}>
+            <Typography color="secondary">Directed</Typography>
+          </Box>
+          {directed.length > 0 ? <React.Fragment>{renderFilms(directed)}</React.Fragment> : <p>No movies</p>}
+          <Box sx={{ padding: '7px 0', borderBottom: '1px solid #999' }}>
+            <Typography color="secondary">Acted</Typography>
+          </Box>
+          {acted.length > 0 ? <React.Fragment>{renderFilms(acted)}</React.Fragment> : <p>No movies</p>}
         </Box>
       </Grid>
     </Grid>

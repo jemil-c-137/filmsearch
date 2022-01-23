@@ -1,17 +1,37 @@
+const { FilmsCollection } = require('../models/Films');
+const { GenresCollection } = require('../models/Genre');
+const { PersonCollection } = require('../models/Persons');
+
 const Query = {
-  films: (parent, args, { films }) => {
-    return films
+  films: async () => {
+    const films = await FilmsCollection.find().populate('genres');
+    return films;
+  },
+  film: async (parent, args, { films }) => {
+    const { id } = args;
+    const film = await FilmsCollection.findById(id).populate('director').populate('actors').populate('genres');
+    return film;
   },
   directors: (parent, args, { directors }) => directors,
-  genres: (parent, args, { genres }) => genres,
+  genres: async () => {
+    const allGenres = await GenresCollection.find();
+    return allGenres;
+  },
   actors: (parent, args, { actors }) => actors,
-  persons: (parent, args, { persons }) => persons,
-  person: (parent, args, { persons }) => {
-    return persons.find((p) => p.slug === args.slug);
+  persons: async () => {
+    const allPersons = await PersonCollection.find();
+    return allPersons;
   },
-  film: (parent, args, { films }) => {
-    return films.find((f) => f.slug === args.slug);
+  person: async (parent, args, { persons }) => {
+    const { id } = args;
+    const res = await PersonCollection.findById(id).populate('directed').populate('acted');
+    const person = {
+      ...res._doc,
+      birthDate: res.birthDate.toISOString(),
+    };
+    return person;
   },
+
   actor: (parent, args, { actors }) => {
     return actors.find((a) => a.slug === args.slug);
   },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { useQuery, gql } from '@apollo/client';
 import { Avatar, Box, Grid, Paper, Typography } from '@mui/material';
@@ -7,19 +7,18 @@ import styled from '@mui/system/styled';
 import GenreList from '../components/GenreList';
 import PersonList from '../components/PersonList';
 import { StyledImage } from '../elements/StyledImage';
-import { FILM_PAGE, FILM_PAGEVariables } from '../interfaces/FILM_PAGE';
-
+import { Film, FilmVariables } from '../interfaces/Film';
 
 const FILM_PAGE_QUERY = gql`
-  query FILM_PAGE($slug: String!) {
-    film(slug: $slug) {
+  query Film($id: ID!) {
+    film(id: $id) {
       title
       year
       description
       rate
       duration
       image
-      genre {
+      genres {
         name
         slug
         id
@@ -61,9 +60,11 @@ const Rate = styled(Typography)`
 `;
 
 const FilmPage = () => {
-  const { slug } = useParams<FILM_PAGEVariables>();
-  const { loading, error, data } = useQuery<FILM_PAGE>(FILM_PAGE_QUERY, {
-    variables: { slug },
+  const {
+    state: { id },
+  } = useLocation<{ id: string }>();
+  const { loading, error, data } = useQuery<Film, FilmVariables>(FILM_PAGE_QUERY, {
+    variables: { id },
   });
 
   if (loading) return <div>loading...</div>;
@@ -90,7 +91,7 @@ const FilmPage = () => {
           <Bordered>
             <FlexBox sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="body1">Genres: </Typography>
-              <GenreList genres={film.genre} />
+              <GenreList genres={film.genres} />
             </FlexBox>
           </Bordered>
           <FlexBox>

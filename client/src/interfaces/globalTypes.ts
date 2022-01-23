@@ -7,14 +7,6 @@
 // START Enums and Input Objects
 //==============================================================
 
-export enum RolesEnum {
-  Actor = "Actor",
-  Director = "Director",
-  Operator = "Operator",
-  Producer = "Producer",
-  Screenwriter = "Screenwriter",
-}
-
 export interface CreateFilmInput {
   title: string;
   year: number;
@@ -26,12 +18,13 @@ export interface CreateFilmInput {
   tvShow?: boolean | null;
   director?: string | null;
   actors?: (string | null)[] | null;
+  genres?: (string | null)[] | null;
 }
 
 export interface CreatePersonInput {
   name: string;
   birthDate: string;
-  image: string;
+  image: any;
   bio: string;
 }
 

@@ -3,23 +3,23 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { RolesEnum } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: Person
 // ====================================================
 
-export interface Person_person_films_film {
+export interface Person_person_acted {
   __typename: "Film";
   title: string;
-  slug: string;
   id: string;
+  slug: string;
 }
 
-export interface Person_person_films {
-  __typename: "CrewMember";
-  film: Person_person_films_film;
-  role: RolesEnum;
+export interface Person_person_directed {
+  __typename: "Film";
+  title: string;
+  id: string;
+  slug: string;
 }
 
 export interface Person_person {
@@ -28,7 +28,8 @@ export interface Person_person {
   birthDate: string;
   image: string;
   bio: string;
-  films: Person_person_films[] | null;
+  acted: (Person_person_acted | null)[];
+  directed: (Person_person_directed | null)[];
 }
 
 export interface Person {
@@ -36,5 +37,5 @@ export interface Person {
 }
 
 export interface PersonVariables {
-  slug: string;
+  id: string;
 }

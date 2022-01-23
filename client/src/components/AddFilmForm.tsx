@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Paper, TextField, Typography } from '@mui/material';
-import { FormProvider, useForm, Controller } from 'react-hook-form';
-import { FormInputText, Modal } from '../elements';
+import { useForm, Controller } from 'react-hook-form';
+import { Modal } from '../elements';
 import Rating from '@mui/material/Rating';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -14,7 +14,7 @@ import Stack from '@mui/material/Stack';
 import { gql, useMutation } from '@apollo/client';
 import { IForm } from '../interfaces/types';
 import AddPersonForm from './AddPersonForm';
-import PersonsFields from './PersonsFields/PersonsFields';
+import FormSelects from './FormFields/FormSelects';
 
 const defaultValues = {
   title: '',
@@ -24,10 +24,13 @@ const defaultValues = {
   tvShow: false,
   year: new Date(),
   image: undefined,
+  actors: [],
+  director: '',
+  genres: [],
 };
 
-const TEST_MUTATION = gql`
-  mutation Mutation($input: CreateFilmInput) {
+const ADD_FILM_MUTATION = gql`
+  mutation AddFilm($input: CreateFilmInput) {
     addFilm(input: $input) {
       isSuccess
     }
@@ -39,13 +42,26 @@ const AddFilmForm = () => {
   const { handleSubmit, control, register } = useForm<IForm>({ defaultValues });
 
   const [openPersonDialog, toggleOpenPersonDialog] = useState(false);
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const [selectedActors, setSelectedActors] = useState<string[]>([]);
+  const [selectedDirector, setSelectedDirector] = useState('');
 
-  const [addFilm, { data, loading, error }] = useMutation(TEST_MUTATION);
+  const handleSelectGenre = (genres: string[]) => {
+    setSelectedGenres(genres);
+  };
+
+  const handleSelectActors = (actors: string[]) => {
+    setSelectedActors(actors);
+  };
+
+  const handleSelectDirector = (director: string) => {
+    setSelectedDirector(director);
+  };
+
+  const [addFilm, { data, loading, error }] = useMutation(ADD_FILM_MUTATION);
 
   const onSubmit = async (data: IForm) => {
-
     const file = data.image[0];
-
 
     const payload = {
       ...data,
@@ -53,7 +69,11 @@ const AddFilmForm = () => {
       rate: parseFloat(data.rate),
       year: data.year.getFullYear(),
       image: file,
+      genres: selectedGenres,
+      actors: selectedActors,
+      director: selectedDirector,
     };
+
     addFilm({ variables: { input: payload } })
       .then((res) => console.log('response success', res))
       .catch((res) => console.log('response error', res));
@@ -181,7 +201,12 @@ const AddFilmForm = () => {
 
             <input type="file" multiple={true} {...register('image')} />
 
-            <PersonsFields toggleOpen={toggleOpenPersonDialog} />
+            <FormSelects
+              toggleOpen={toggleOpenPersonDialog}
+              addGenres={handleSelectGenre}
+              addActors={handleSelectActors}
+              addDirector={handleSelectDirector}
+            />
           </Stack>
           <Button color="secondary" type="submit" variant="contained">
             Save
