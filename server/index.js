@@ -1,4 +1,8 @@
-const { ApolloServer, gql } = require('apollo-server');
+const express = require('express');
+const dotenv = require('dotenv');
+const { ApolloServer } = require('apollo-server-express');
+const cors = require('cors');
+const { graphqlUploadExpress } = require('graphql-upload');
 const { Query } = require('./resolvers/Query');
 const { Director } = require('./resolvers/Director');
 const { Actor } = require('./resolvers/Actors');
@@ -31,20 +35,26 @@ const context = {
   PersonCollection,
 };
 
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
-const server = new ApolloServer({ typeDefs, resolvers, context });
-// The `listen` method launches a web server.
+async function startServer() {
+  dotenv.config();
 
-mongoose
-  .connect(
+  const server = new ApolloServer({ typeDefs, resolvers, context });
+  await server.start();
+  const app = express();
+
+  app.use(graphqlUploadExpress());
+
+  app.use(cors());
+
+  server.applyMiddleware({ app, cors: true });
+
+  await mongoose.connect(
     `mongodb+srv://${process.env.mongoUserName}:${process.env.mongoUserPassword}@cluster0.gglqd.mongodb.net/${process.env.mongoDatabase}?retryWrites=true&w=majority`,
-  )
-  .then(() => {
-    server.listen().then(({ url }) => {
-      console.log(`🚀  Server ready at ${url}`);
-    });
-  })
-  .catch(() => {
-    console.log('Error while connecting to MongoDb');
-  });
+  );
+
+  await new Promise((r) => app.listen({ port: 4000 }, r));
+
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+}
+
+startServer();

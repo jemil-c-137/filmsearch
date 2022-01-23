@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -7,29 +7,34 @@ import CardContent from '@mui/material/CardContent';
 
 import Typography from '@mui/material/Typography';
 
-import { styled, Theme } from '@mui/material/styles';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import GenreList from './GenreList';
-import { FILMS_films } from '../interfaces/FILMS';
+import { Films_films } from '../interfaces/Films';
 
-
-const FilmCard: React.FC<FILMS_films> = ({ title, image, rate, genre, duration, year, slug }) => {
-  const history = useHistory();
+const FilmCard: React.FC<Films_films> = ({ title, image, rate, genres, duration, year, slug, id }) => {
 
   return (
-    <Card sx={{ maxWidth: 345 }} variant="outlined" onClick={() => history.push(`/film/${slug}`)}>
-      <CardHeader title={title} subheader={year} />
-      <CardMedia component="img" height="500" image={image} />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          Rate: {rate}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Duration: {duration}
-        </Typography>
-        <GenreList genres={genre} />
-      </CardContent>
-    </Card>
+    <Link
+      to={{
+        pathname: `/film/${slug}`,
+        state: {
+          id,
+        },
+      }}>
+      <Card sx={{ maxWidth: 345 }} variant="outlined">
+        <CardHeader title={title} subheader={year} />
+        <CardMedia component="img" height="500" image={image} />
+        <CardContent>
+          <Typography variant="body2" color="text.secondary">
+            Rate: {rate}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Duration: {duration}
+          </Typography>
+          <GenreList genres={genres} />
+        </CardContent>
+      </Card>
+    </Link>
   );
 };
 

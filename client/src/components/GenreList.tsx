@@ -1,8 +1,8 @@
 import Chip from '@mui/material/Chip';
 import { styled, Theme } from '@mui/material/styles';
 import React from 'react';
-import { FILMS_films_genre } from '../interfaces/FILMS';
-import { FILM_PAGE_film_genre } from '../interfaces/FILM_PAGE';
+import { Film_film_genres } from '../interfaces/Film';
+import { Films_films_genres } from '../interfaces/Films';
 
 const ListItem = styled('div')(({ theme }: { theme: Theme }) => ({
   margin: theme.spacing(0.5),
@@ -10,7 +10,7 @@ const ListItem = styled('div')(({ theme }: { theme: Theme }) => ({
 }));
 
 interface IGenreListProps {
-  genres: Array<FILM_PAGE_film_genre | FILMS_films_genre>;
+  genres: Array<Film_film_genres | Films_films_genres>;
 }
 
 const GenreList: React.FC<IGenreListProps> = ({ genres }) => {

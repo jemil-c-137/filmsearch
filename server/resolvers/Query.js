@@ -1,9 +1,16 @@
+const { FilmsCollection } = require('../models/Films');
 const { GenresCollection } = require('../models/Genre');
 const { PersonCollection } = require('../models/Persons');
 
 const Query = {
-  films: (parent, args, { films }) => {
+  films: async () => {
+    const films = await FilmsCollection.find().populate('genres');
     return films;
+  },
+  film: async (parent, args, { films }) => {
+    const { id } = args;
+    const film = await FilmsCollection.findById(id).populate('director').populate('actors').populate('genres');
+    return film;
   },
   directors: (parent, args, { directors }) => directors,
   genres: async () => {
@@ -15,12 +22,16 @@ const Query = {
     const allPersons = await PersonCollection.find();
     return allPersons;
   },
-  person: (parent, args, { persons }) => {
-    return persons.find((p) => p.slug === args.slug);
+  person: async (parent, args, { persons }) => {
+    const { id } = args;
+    const res = await PersonCollection.findById(id).populate('directed').populate('acted');
+    const person = {
+      ...res._doc,
+      birthDate: res.birthDate.toISOString(),
+    };
+    return person;
   },
-  film: (parent, args, { films }) => {
-    return films.find((f) => f.slug === args.slug);
-  },
+
   actor: (parent, args, { actors }) => {
     return actors.find((a) => a.slug === args.slug);
   },

@@ -1,3 +1,5 @@
+import { FormFieldsValues_genres } from "./FormFieldsValues";
+
 export interface PersonOptionType {
   name: string;
   image: File[];
@@ -14,7 +16,9 @@ export interface IForm {
   tvShow: boolean;
   year: Date;
   image: File[];
-  director: TPerson;
+  director: string;
+  actors: string[];
+  genres: string[];
 }
 
 export type TPerson = Omit<PersonOptionType, 'inputValue'>;

@@ -9,9 +9,10 @@ const filter = createFilterOptions<IPersonSelect>();
 interface IPersonSelectProps {
   toggleOpen: (isOpen: boolean) => void;
   persons: any[];
+  addDirector: (director: string) => void;
 }
 
-const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons }) => {
+const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addDirector }) => {
   const [value, setValue] = React.useState<IPersonSelect | null>(null);
 
   const [dialogValue, setDialogValue] = React.useState<IPersonSelect>({
@@ -25,7 +26,6 @@ const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons }) => 
       <Autocomplete
         value={value}
         onChange={(event, newValue) => {
-          console.log('newvalue', newValue);
           if (typeof newValue === 'string') {
             // timeout to avoid instant validation of the dialog's form.
             setTimeout(() => {
@@ -44,6 +44,7 @@ const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons }) => 
               bio: '',
             });
           } else {
+            addDirector(newValue.id);
             setValue(newValue);
           }
         }}

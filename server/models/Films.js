@@ -2,35 +2,38 @@ const mongoose = require('mongoose');
 const { PersonModel } = require('./Persons');
 const { Schema } = mongoose;
 
-
 const FilmSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+  },
+  duration: {
+    type: Number,
+    required: true,
   },
   year: {
     type: Number,
-    required: true
+    required: true,
   },
   image: {
     type: String,
-    required: true
+    required: true,
   },
   slug: {
     type: String,
-    required: true
+    required: true,
   },
   rate: {
     type: Number,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   featured: {
     type: Boolean,
-    required: false
+    required: false,
   },
   tvShow: {
     type: Boolean,
@@ -38,33 +41,20 @@ const FilmSchema = new Schema({
   },
   director: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: "Person"
+    ref: 'Person',
   },
   actors: {
     type: [mongoose.SchemaTypes.ObjectId],
-    ref: "Person"
-  },
-  operator: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: "Person"
-  },
-  screenwriter: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: "Person"
-  },
-  producers: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: "Person"
+    ref: 'Person',
   },
   genres: {
     type: [mongoose.SchemaTypes.ObjectId],
-    ref: "Genre"
-  }
-})
+    ref: 'Genre',
+  },
+});
 
-const Film = mongoose.model('Film', FilmSchema)
+const Film = mongoose.model('Film', FilmSchema);
 
 module.exports = {
-  FilmsCollection: Film
-}
-
+  FilmsCollection: Film,
+};

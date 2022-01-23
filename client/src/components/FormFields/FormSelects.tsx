@@ -22,9 +22,12 @@ export const QUERY_FORM_SELECTS = gql`
 
 interface IPersonsFieldsProps {
   toggleOpen: (isOpen: boolean) => void;
+  addGenres: (genres: string[]) => void;
+  addActors: (actors: string[]) => void;
+  addDirector: (director: string) => void;
 }
 
-const FormSelects: React.FC<IPersonsFieldsProps> = ({ toggleOpen }) => {
+const FormSelects: React.FC<IPersonsFieldsProps> = ({ toggleOpen, addGenres, addActors, addDirector }) => {
   const { loading, data, error } = useQuery<FormFieldsValues>(QUERY_FORM_SELECTS);
 
   return (
@@ -32,9 +35,9 @@ const FormSelects: React.FC<IPersonsFieldsProps> = ({ toggleOpen }) => {
       {loading && <CircularProgress />}
       {data && (
         <Stack spacing={3}>
-          <GenreField genres={data.genres} />
-          <PersonSelect toggleOpen={toggleOpen} persons={data.persons} />
-          <MultiplePersonSelect toggleOpen={toggleOpen} persons={data.persons} />
+          <GenreField genres={data.genres} addGenres={addGenres} />
+          <PersonSelect toggleOpen={toggleOpen} persons={data.persons} addDirector={addDirector} />
+          <MultiplePersonSelect toggleOpen={toggleOpen} persons={data.persons} addActors={addActors} />
         </Stack>
       )}
     </div>

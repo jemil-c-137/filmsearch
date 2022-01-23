@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FILM_PAGE_film_actors, FILM_PAGE_film_director } from '../interfaces/FILM_PAGE';
+import { Film_film_actors, Film_film_director } from '../interfaces/Film';
 
 const AvatarLabel = styled('div')`
   display: flex;
@@ -11,7 +11,7 @@ const AvatarLabel = styled('div')`
 `;
 
 interface IPersonListProps {
-  persons: FILM_PAGE_film_actors[] | FILM_PAGE_film_director[];
+  persons: Film_film_actors[] | Film_film_director[];
 }
 
 const PersonList: React.FC<IPersonListProps> = ({ persons }) => {
@@ -21,7 +21,14 @@ const PersonList: React.FC<IPersonListProps> = ({ persons }) => {
         <AvatarLabel key={p.id}>
           <Avatar alt={p.name} src={p.image} style={{ marginRight: '10px' }} />
           <Typography color="teal">
-            <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/${p.__typename.toLowerCase()}/${p.slug}`}>
+            <Link
+              style={{ textDecoration: 'none', color: 'inherit' }}
+              to={{
+                pathname: `/person/${p.slug}`,
+                state: {
+                  id: p.id,
+                },
+              }}>
               {p.name}
             </Link>
           </Typography>
