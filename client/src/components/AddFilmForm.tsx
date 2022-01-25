@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Paper, TextField, Typography } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { Modal } from '../elements';
@@ -37,9 +37,18 @@ const ADD_FILM_MUTATION = gql`
   }
 `;
 
-
 const AddFilmForm = () => {
-  const { handleSubmit, control, register } = useForm<IForm>({ defaultValues });
+  const {
+    handleSubmit,
+    control,
+    register,
+    formState: { errors, isValid },
+  } = useForm<IForm>({
+    defaultValues,
+    mode: 'onChange',
+  });
+
+  useEffect(() => {}, [errors, isValid]);
 
   const [openPersonDialog, toggleOpenPersonDialog] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
@@ -86,7 +95,7 @@ const AddFilmForm = () => {
       <Typography variant="h6"> Form Demo </Typography>
 
       <Modal btnText="add film" modalTitle="Add a movie">
-        <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3}>
             <Controller
               name="title"
@@ -97,18 +106,20 @@ const AddFilmForm = () => {
                   message: 'Please enter a movie title',
                 },
               }}
-              render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
-                <TextField
-                  helperText={error ? error.message : null}
-                  size="small"
-                  error={!!error}
-                  onChange={onChange}
-                  value={value}
-                  fullWidth
-                  label="Movie title"
-                  variant="outlined"
-                />
-              )}
+              render={({ field: { onChange, value }, fieldState: { error }, formState }) => {
+                return (
+                  <TextField
+                    helperText={error ? error.message : null}
+                    size="small"
+                    error={!!error}
+                    onChange={onChange}
+                    value={value}
+                    fullWidth
+                    label="Movie title"
+                    variant="outlined"
+                  />
+                );
+              }}
             />
             <Controller
               name="duration"
@@ -161,6 +172,12 @@ const AddFilmForm = () => {
               <Controller
                 name="rate"
                 control={control}
+                rules={{
+                  required: {
+                    value: true,
+                    message: 'Please rate the movie',
+                  },
+                }}
                 render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                   <Rating
                     name="rate"
@@ -199,7 +216,11 @@ const AddFilmForm = () => {
               )}
             />
 
-            <input type="file" multiple={true} {...register('image')} />
+            <input
+              type="file"
+              multiple={true}
+              {...register('image', { required: { value: true, message: 'Please provide a movie poster' } })}
+            />
 
             <FormSelects
               toggleOpen={toggleOpenPersonDialog}
@@ -208,7 +229,7 @@ const AddFilmForm = () => {
               addDirector={handleSelectDirector}
             />
           </Stack>
-          <Button color="secondary" type="submit" variant="contained">
+          <Button color="secondary" type="submit" variant="contained" disabled={!isValid}>
             Save
           </Button>
         </form>
