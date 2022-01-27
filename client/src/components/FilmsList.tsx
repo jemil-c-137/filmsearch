@@ -2,9 +2,9 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import FilmCard from './FilmCard';
-import { Films } from '../interfaces/Films';
+import { AllFilms } from '../interfaces/AllFilms';
 
-interface IFilmsListProps extends Films {}
+interface IFilmsListProps extends AllFilms {}
 
 const FilmsList: React.FC<IFilmsListProps> = ({ films }) => {
   return (
