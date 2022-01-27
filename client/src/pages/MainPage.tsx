@@ -2,11 +2,10 @@ import React from 'react';
 import { useQuery, gql } from '@apollo/client';
 import FilmsList from '../components/FilmsList';
 import AddFilmForm from '../components/AddFilmForm';
-import { Films } from '../interfaces/Films';
-
+import { AllFilms } from '../interfaces/AllFilms';
 
 const ALL_FILMS = gql`
-  query Films {
+  query AllFilms {
     films {
       title
       id
@@ -25,7 +24,7 @@ const ALL_FILMS = gql`
 `;
 
 const MainPage = () => {
-  const { loading, error, data } = useQuery<Films>(ALL_FILMS);
+  const { loading, error, data } = useQuery<AllFilms>(ALL_FILMS);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;

@@ -4,21 +4,21 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: FILMS
+// GraphQL query operation: AllFilms
 // ====================================================
 
-export interface FILMS_films_genre {
+export interface AllFilms_films_genres {
   __typename: "Genre";
   name: string;
   id: string;
   slug: string;
 }
 
-export interface FILMS_films {
+export interface AllFilms_films {
   __typename: "Film";
   title: string;
   id: string;
-  genre: FILMS_films_genre[];
+  genres: AllFilms_films_genres[];
   year: number;
   rate: number;
   slug: string;
@@ -26,6 +26,6 @@ export interface FILMS_films {
   image: string;
 }
 
-export interface FILMS {
-  films: FILMS_films[];
+export interface AllFilms {
+  films: AllFilms_films[];
 }

@@ -9,9 +9,9 @@ import Typography from '@mui/material/Typography';
 
 import { Link, useHistory } from 'react-router-dom';
 import GenreList from './GenreList';
-import { Films_films } from '../interfaces/Films';
+import { AllFilms_films } from '../interfaces/AllFilms';
 
-const FilmCard: React.FC<Films_films> = ({ title, image, rate, genres, duration, year, slug, id }) => {
+const FilmCard: React.FC<AllFilms_films> = ({ title, image, rate, genres, duration, year, slug, id }) => {
 
   return (
     <Link

@@ -121,7 +121,7 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ open, handleClose }) => 
               <TextField
                 helperText={error ? error.message : null}
                 autoFocus
-                error={!!error}n
+                error={!!error}
                 margin="dense"
                 value={value}
                 onChange={onChange}
