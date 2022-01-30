@@ -3,35 +3,23 @@ const dotenv = require('dotenv');
 const { ApolloServer } = require('apollo-server-express');
 const cors = require('cors');
 const { graphqlUploadExpress } = require('graphql-upload');
-const { Query } = require('./resolvers/Query');
-const { Director } = require('./resolvers/Director');
-const { Actor } = require('./resolvers/Actors');
-const { Genre } = require('./resolvers/Genres');
-const { Film } = require('./resolvers/Films');
-const { Person } = require('./resolvers/Person');
-const { Mutation } = require('./resolvers/Mutation');
-const { genres, actors, directors, films, persons, RolesEnum } = require('./db');
-const typeDefs = require('./Schema');
 const mongoose = require('mongoose');
-const { PersonCollection } = require('./models/Persons');
+
+const { Query } = require('./graphql/queries/queries');
+const { Film } = require('./graphql/queries/film');
+const { Person } = require('./graphql/queries/person');
+const { Mutation } = require('./graphql/mutations/mutations');
+const typeDefs = require('./graphql/typedefs/schema');
+const { PersonCollection } = require('./data/models/person');
 
 const resolvers = {
   Query,
-  Director,
-  Actor,
-  Genre,
   Film,
   Person,
   Mutation,
 };
 
 const context = {
-  films,
-  directors,
-  genres,
-  actors,
-  persons,
-  RolesEnum,
   PersonCollection,
 };
 

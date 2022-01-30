@@ -1,5 +1,5 @@
 const Person = {
-  acted: (parent) => parent.acted,
+  acted: (parent) => parent.acted, // films person acted in
   directed: (parent) => parent.directed,
 };
 
