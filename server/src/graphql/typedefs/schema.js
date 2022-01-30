@@ -19,17 +19,6 @@ const typeDefs = gql`
     yearEnd: Int
     tvShow: Boolean
     featured: Boolean
-    crew: [Roles]
-  }
-
-  type Director {
-    id: ID!
-    name: String!
-    age: Int!
-    films: [Film!]!
-    image: String!
-    slug: String!
-    bio: String
   }
 
   type Genre {
@@ -37,16 +26,6 @@ const typeDefs = gql`
     name: String!
     slug: String!
     films: [Film!]!
-  }
-
-  type Actor {
-    id: ID!
-    name: String!
-    age: Int!
-    films: [Film!]!
-    image: String!
-    slug: String!
-    bio: String
   }
 
   type Person {
@@ -60,22 +39,6 @@ const typeDefs = gql`
     acted: [Film]!
   }
 
-  type Roles {
-    person: Person
-    role: RolesEnum
-  }
-
-  type CrewMember {
-    film: Film!
-    role: RolesEnum!
-  }
-
-  type File {
-    filename: String!
-    mimetype: String!
-    encoding: String!
-  }
-
   input FilmOrder {
     description: Sort
     title: Sort
@@ -87,25 +50,12 @@ const typeDefs = gql`
     desc
   }
 
-  enum RolesEnum {
-    Director
-    Actor
-    Producer
-    Operator
-    Screenwriter
-  }
-
   type Query {
     films: [Film!]!
-    directors: [Director!]!
     genres: [Genre!]!
-    actors: [Actor!]!
     persons: [Person!]!
     film(id: ID!): Film
-    actor(slug: String!): Actor
-    director(slug: String!): Director
     person(id: ID!): Person
-    uploads: [File]
   }
 
   input CreatePersonInput {
@@ -113,10 +63,6 @@ const typeDefs = gql`
     birthDate: String!
     image: Upload!
     bio: String!
-  }
-
-  type Success {
-    isSuccess: Upload
   }
 
   input CreateFilmInput {
@@ -134,11 +80,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addPerson(input: CreatePersonInput!): Person
-    addFilm(input: CreateFilmInput): Success!
-    addGenre(name: String): Success
-    testMutation(text: String): String
-    fileUpload(file: Upload!): Success
+    addPerson(input: CreatePersonInput!): Person!
+    addFilm(input: CreateFilmInput): Film!
   }
 `;
 
