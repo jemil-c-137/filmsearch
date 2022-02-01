@@ -21,7 +21,7 @@ export const QUERY_FORM_SELECTS = gql`
 `;
 
 interface IPersonsFieldsProps {
-  toggleOpen: (isOpen: boolean) => void;
+  toggleOpen: (open: boolean, name: string) => void;
   addGenres: (genres: string[]) => void;
   addActors: (actors: string[]) => void;
   addDirector: (director: string) => void;

@@ -7,19 +7,13 @@ import { IPersonSelect } from './MultiplePersonSelect';
 const filter = createFilterOptions<IPersonSelect>();
 
 interface IPersonSelectProps {
-  toggleOpen: (isOpen: boolean) => void;
+  toggleOpen: (isOpen: boolean, name: string) => void;
   persons: any[];
   addDirector: (director: string) => void;
 }
 
 const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addDirector }) => {
   const [value, setValue] = React.useState<IPersonSelect | null>(null);
-
-  const [dialogValue, setDialogValue] = React.useState<IPersonSelect>({
-    name: '',
-    birthDate: new Date(),
-    bio: '',
-  });
 
   return (
     <React.Fragment>
@@ -29,20 +23,10 @@ const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addDi
           if (typeof newValue === 'string') {
             // timeout to avoid instant validation of the dialog's form.
             setTimeout(() => {
-              toggleOpen(true);
-              setDialogValue({
-                name: newValue,
-                bio: '',
-                birthDate: new Date(),
-              });
+              toggleOpen(true, newValue);
             });
           } else if (newValue && newValue.inputValue) {
-            toggleOpen(true);
-            setDialogValue({
-              name: newValue.inputValue,
-              birthDate: new Date(),
-              bio: '',
-            });
+            toggleOpen(true, newValue.inputValue);
           } else {
             addDirector(newValue.id);
             setValue(newValue);

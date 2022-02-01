@@ -11,7 +11,7 @@ export type IPersonSelect = Omit<PersonOptionType, 'image'>;
 const filter = createFilterOptions<IPersonSelect | FormFieldsValues_persons>();
 
 interface IPersonSelectProps {
-  toggleOpen: (isOpen: boolean) => void;
+  toggleOpen: (isOpen: boolean, name: string) => void;
   persons: FormFieldsValues_persons[];
   addActors: (actors: string[]) => void;
 }
@@ -30,12 +30,6 @@ const MultiplePersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, person
     addActors(actorsIds);
   };
 
-  const [dialogValue, setDialogValue] = React.useState<IPersonSelect>({
-    name: '',
-    birthDate: new Date(),
-    bio: '',
-  });
-
   return (
     <React.Fragment>
       <Autocomplete
@@ -48,12 +42,7 @@ const MultiplePersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, person
           const lastElement = newValue[newValue.length - 1];
 
           if (isPersonOptionType(lastElement)) {
-            toggleOpen(true);
-            setDialogValue({
-              name: lastElement.inputValue || '',
-              birthDate: new Date(),
-              bio: '',
-            });
+            toggleOpen(true, lastElement.inputValue || '');
           } else {
             a(newValue);
             setValue(newValue);

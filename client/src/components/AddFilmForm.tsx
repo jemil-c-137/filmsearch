@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Button, Paper, TextField, Typography } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import { Modal } from '../elements';
+import { gql, useMutation } from '@apollo/client';
+
 import Rating from '@mui/material/Rating';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -9,12 +10,25 @@ import Checkbox from '@mui/material/Checkbox';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
-
 import Stack from '@mui/material/Stack';
-import { gql, useMutation } from '@apollo/client';
+import { styled } from '@mui/system';
+import ImageIcon from '@mui/icons-material/Image';
+
 import { IForm } from '../interfaces/types';
 import AddPersonForm from './AddPersonForm';
 import FormSelects from './FormFields/FormSelects';
+import { Modal } from '../elements';
+
+export type TToggleCreatePerson = { open: boolean; name: string };
+
+const StyledLabel = styled('label')(({ theme }) => ({
+  color: '#fff',
+  backgroundColor: theme.palette.primary.main,
+  padding: '1rem 0.5rem',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+}));
 
 const defaultValues = {
   title: '',
@@ -50,7 +64,7 @@ const AddFilmForm = () => {
 
   useEffect(() => {}, [errors, isValid]);
 
-  const [openPersonDialog, toggleOpenPersonDialog] = useState(false);
+  const [openPersonDialog, toggleOpenPersonDialog] = useState<TToggleCreatePerson>({ open: false, name: '' });
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [selectedActors, setSelectedActors] = useState<string[]>([]);
   const [selectedDirector, setSelectedDirector] = useState('');
@@ -88,7 +102,11 @@ const AddFilmForm = () => {
       .catch((res) => console.log('response error', res));
   };
 
-  const closePersonForm = () => toggleOpenPersonDialog(false);
+  const closePersonForm = () => toggleOpenPersonDialog({ open: false, name: '' });
+
+  const handleToggle = (open: boolean, name: string) => {
+    toggleOpenPersonDialog({ open, name });
+  };
 
   return (
     <Paper>
@@ -215,25 +233,35 @@ const AddFilmForm = () => {
                 </LocalizationProvider>
               )}
             />
-
-            <input
-              type="file"
-              multiple={true}
-              {...register('image', { required: { value: true, message: 'Please provide a movie poster' } })}
-            />
+            <StyledLabel htmlFor="image">
+              <input
+                type="file"
+                multiple={true}
+                style={{ cursor: 'pointer' }}
+                {...register('image', { required: { value: true, message: 'Please provide a movie poster' } })}
+              />
+              Upload poster
+              <ImageIcon sx={{ marginLeft: '1rem' }} />
+            </StyledLabel>
 
             <FormSelects
-              toggleOpen={toggleOpenPersonDialog}
+              toggleOpen={handleToggle}
               addGenres={handleSelectGenre}
               addActors={handleSelectActors}
               addDirector={handleSelectDirector}
             />
           </Stack>
-          <Button color="secondary" type="submit" variant="contained" disabled={!isValid}>
+          <Button
+            color="secondary"
+            type="submit"
+            variant="contained"
+            disabled={
+              !isValid || selectedDirector.length === 0 || selectedGenres.length === 0 || selectedActors.length === 0
+            }>
             Save
           </Button>
         </form>
-        <AddPersonForm open={openPersonDialog} handleClose={closePersonForm} />
+        {openPersonDialog.open && <AddPersonForm toggle={openPersonDialog} handleClose={closePersonForm} />}
       </Modal>
     </Paper>
   );
