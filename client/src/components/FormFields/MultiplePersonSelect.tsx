@@ -1,27 +1,25 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
-
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import { PersonOptionType } from '../../interfaces/types';
+
+import { INewPerson } from '../../interfaces/types';
 import { FormFieldsValues_persons } from '../../interfaces/FormFieldsValues';
-import { isFormFieldPersonType, isPersonOptionType } from '../../utils/helpers/typeguards';
+import { hasOwnProperty } from '../../utils/helpers/typeguards';
 
-export type IPersonSelect = Omit<PersonOptionType, 'image'>;
-
-const filter = createFilterOptions<IPersonSelect | FormFieldsValues_persons>();
+const filter = createFilterOptions<INewPerson | FormFieldsValues_persons>();
 
 interface IPersonSelectProps {
-  toggleOpen: (isOpen: boolean) => void;
+  toggleOpen: (isOpen: boolean, name: string) => void;
   persons: FormFieldsValues_persons[];
   addActors: (actors: string[]) => void;
 }
 
 const MultiplePersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addActors }) => {
-  const [value, setValue] = React.useState<(FormFieldsValues_persons | IPersonSelect)[]>([]);
+  const [value, setValue] = React.useState<(FormFieldsValues_persons | INewPerson)[]>([]);
 
-  const a = (actors: (FormFieldsValues_persons | IPersonSelect)[]) => {
-    const actorsIds = actors.reduce((prev, current, index) => {
-      if (isFormFieldPersonType(current)) {
+  const setActors = (actors: (FormFieldsValues_persons | INewPerson)[]) => {
+    const actorsIds = actors.reduce((prev, current) => {
+      if (!hasOwnProperty(current, 'newPerson')) {
         return [...prev, current.id];
       } else {
         return prev;
@@ -30,12 +28,6 @@ const MultiplePersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, person
     addActors(actorsIds);
   };
 
-  const [dialogValue, setDialogValue] = React.useState<IPersonSelect>({
-    name: '',
-    birthDate: new Date(),
-    bio: '',
-  });
-
   return (
     <React.Fragment>
       <Autocomplete
@@ -43,19 +35,14 @@ const MultiplePersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, person
         id="tags-outlined"
         options={persons}
         value={value}
-        onChange={(event, newValue) => {
+        onChange={(_, newValue) => {
           if (newValue.length === 0) return setValue([]);
           const lastElement = newValue[newValue.length - 1];
 
-          if (isPersonOptionType(lastElement)) {
-            toggleOpen(true);
-            setDialogValue({
-              name: lastElement.inputValue || '',
-              birthDate: new Date(),
-              bio: '',
-            });
+          if (hasOwnProperty(lastElement, 'newPerson')) {
+            toggleOpen(true, lastElement.createWithName || '');
           } else {
-            a(newValue);
+            setActors(newValue);
             setValue(newValue);
           }
         }}
@@ -64,10 +51,11 @@ const MultiplePersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, person
 
           if (params.inputValue !== '') {
             filtered.push({
-              inputValue: params.inputValue,
+              createWithName: params.inputValue,
               name: `Add "${params.inputValue}"`,
-              birthDate: new Date(),
-              bio: '',
+              newPerson: true,
+              id: 'new person',
+              __typename: 'Person',
             });
           }
 

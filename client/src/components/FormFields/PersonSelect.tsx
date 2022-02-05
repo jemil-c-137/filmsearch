@@ -1,63 +1,54 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
-
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import { IPersonSelect } from './MultiplePersonSelect';
 
-const filter = createFilterOptions<IPersonSelect>();
+import { FormFieldsValues_persons } from '../../interfaces/FormFieldsValues';
+import { hasOwnProperty } from '../../utils/helpers/typeguards';
+import { INewPerson } from '../../interfaces/types';
+
+const filter = createFilterOptions<FormFieldsValues_persons | INewPerson | string>();
 
 interface IPersonSelectProps {
-  toggleOpen: (isOpen: boolean) => void;
-  persons: any[];
+  toggleOpen: (isOpen: boolean, name: string) => void;
+  persons: FormFieldsValues_persons[];
   addDirector: (director: string) => void;
 }
 
 const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addDirector }) => {
-  const [value, setValue] = React.useState<IPersonSelect | null>(null);
-
-  const [dialogValue, setDialogValue] = React.useState<IPersonSelect>({
-    name: '',
-    birthDate: new Date(),
-    bio: '',
-  });
+  const [value, setValue] = React.useState<FormFieldsValues_persons | null>(null);
 
   return (
     <React.Fragment>
       <Autocomplete
         value={value}
-        onChange={(event, newValue) => {
+        onChange={(_, newValue: FormFieldsValues_persons | INewPerson | string | null) => {
+          console.log(newValue, 'newValue');
+          if (newValue === null) return;
           if (typeof newValue === 'string') {
             // timeout to avoid instant validation of the dialog's form.
             setTimeout(() => {
-              toggleOpen(true);
-              setDialogValue({
-                name: newValue,
-                bio: '',
-                birthDate: new Date(),
-              });
+              toggleOpen(true, newValue);
             });
-          } else if (newValue && newValue.inputValue) {
-            toggleOpen(true);
-            setDialogValue({
-              name: newValue.inputValue,
-              birthDate: new Date(),
-              bio: '',
-            });
+          } else if (typeof newValue === 'object' && hasOwnProperty(newValue, 'newPerson')) {
+            toggleOpen(true, newValue.createWithName);
           } else {
             addDirector(newValue.id);
             setValue(newValue);
           }
         }}
-        filterOptions={(options, params) => {
+        filterOptions={(options: (FormFieldsValues_persons | INewPerson | string)[], params) => {
           const filtered = filter(options, params);
 
+          const newPerson: INewPerson = {
+            createWithName: params.inputValue,
+            name: `Add "${params.inputValue}"`,
+            __typename: 'Person',
+            id: 'newPerson',
+            newPerson: true,
+          };
+
           if (params.inputValue !== '') {
-            filtered.push({
-              inputValue: params.inputValue,
-              name: `Add "${params.inputValue}"`,
-              birthDate: new Date(),
-              bio: '',
-            });
+            filtered.push(newPerson);
           }
 
           return filtered;
@@ -69,19 +60,19 @@ const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addDi
           if (typeof option === 'string') {
             return option;
           }
-          if (option.inputValue) {
-            return option.inputValue;
-          }
           return option.name;
         }}
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
-        renderOption={(props, option) => (
-          <li {...props} key={option.id}>
-            {option.name}
-          </li>
-        )}
+        renderOption={(props, option) => {
+          if (typeof option === 'string') return null;
+          return (
+            <li {...props} key={option.id}>
+              {option.name}
+            </li>
+          );
+        }}
         sx={{ width: 300 }}
         freeSolo
         renderInput={(params) => <TextField {...params} label="Director" />}
