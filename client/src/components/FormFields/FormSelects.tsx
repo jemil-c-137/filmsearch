@@ -1,9 +1,11 @@
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
-import PersonSelect from './PersonSelect';
-import MultiplePersonSelect from './MultiplePersonSelect';
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
+
+import PersonSelect from './PersonSelect';
+import MultiplePersonSelect from './MultiplePersonSelect';
+
 import { FormFieldsValues } from '../../interfaces/FormFieldsValues';
 import GenreField from './GenresFields';
 
@@ -28,7 +30,7 @@ interface IPersonsFieldsProps {
 }
 
 const FormSelects: React.FC<IPersonsFieldsProps> = ({ toggleOpen, addGenres, addActors, addDirector }) => {
-  const { loading, data, error } = useQuery<FormFieldsValues>(QUERY_FORM_SELECTS);
+  const { loading, data } = useQuery<FormFieldsValues>(QUERY_FORM_SELECTS);
 
   return (
     <div>

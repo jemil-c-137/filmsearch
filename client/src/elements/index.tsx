@@ -1,2 +1,2 @@
-export { FormInputText } from './FormInputText';
 export { Modal } from './Modal';
+export { StyledImage } from './StyledImage';

@@ -1,12 +1,12 @@
 import React from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { useQuery, gql } from '@apollo/client';
-import { Avatar, Box, Grid, Paper, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import styled from '@mui/system/styled';
 import GenreList from '../components/GenreList';
 import PersonList from '../components/PersonList';
-import { StyledImage } from '../elements/StyledImage';
+import { StyledImage } from '../elements';
 import { Film, FilmVariables } from '../interfaces/Film';
 
 const FILM_PAGE_QUERY = gql`
@@ -50,13 +50,6 @@ const FlexBox = styled(Box)`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-`;
-
-const Rate = styled(Typography)`
-  border-radius: 50%;
-  background: green;
-  display: inline;
-  padding: 3px;
 `;
 
 const FilmPage = () => {

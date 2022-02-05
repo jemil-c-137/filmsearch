@@ -1,12 +1,10 @@
-import { FormFieldsValues_genres } from "./FormFieldsValues";
-
+import { FormFieldsValues_persons } from './FormFieldsValues';
 
 export interface PersonOptionType {
   name: string;
   image: File[];
   birthDate: Date;
   bio: string;
-  inputValue?: string;
 }
 
 export interface IForm {
@@ -22,4 +20,7 @@ export interface IForm {
   genres: string[];
 }
 
-export type TPerson = Omit<PersonOptionType, 'inputValue'>;
+export interface INewPerson extends FormFieldsValues_persons {
+  createWithName: string;
+  newPerson: true;
+}

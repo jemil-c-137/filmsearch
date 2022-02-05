@@ -6,8 +6,8 @@ import Typography from '@mui/material/Typography';
 import gql from 'graphql-tag';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
-import { StyledImage } from '../elements/StyledImage';
-import { Person, PersonVariables, Person_person_acted, Person_person_directed } from '../interfaces/Person';
+import { StyledImage } from '../elements';
+import { Person, Person_person_acted, Person_person_directed } from '../interfaces/Person';
 import { format, differenceInCalendarYears } from 'date-fns';
 
 const PERSON_QUERY = gql`
@@ -84,7 +84,6 @@ const PersonPage = () => {
             color="primary">
             {format(new Date(person.birthDate), 'dd MMM yyyy')} (
             {`${differenceInCalendarYears(new Date(), new Date(person.birthDate))} years`})
-
           </Typography>
           <Typography color="secondary" variant="body1">
             Biography

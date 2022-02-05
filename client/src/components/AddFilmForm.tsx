@@ -81,7 +81,7 @@ const AddFilmForm = () => {
     setSelectedDirector(director);
   };
 
-  const [addFilm, { data, loading, error }] = useMutation(ADD_FILM_MUTATION);
+  const [addFilm] = useMutation(ADD_FILM_MUTATION);
 
   const onSubmit = async (data: IForm) => {
     const file = data.image[0];
@@ -113,8 +113,11 @@ const AddFilmForm = () => {
       <Typography variant="h6"> Form Demo </Typography>
 
       <Modal btnText="add film" modalTitle="Add a movie">
-        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-          <Stack spacing={3}>
+        <form
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+          style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
+          <Stack spacing={3} pb="3">
             <Controller
               name="title"
               control={control}
@@ -181,6 +184,7 @@ const AddFilmForm = () => {
                   value={value}
                   fullWidth
                   label={'Movie description'}
+                  minRows={4}
                   variant="outlined"
                 />
               )}
@@ -255,6 +259,7 @@ const AddFilmForm = () => {
             color="secondary"
             type="submit"
             variant="contained"
+            style={{ marginTop: '1rem' }}
             disabled={
               !isValid || selectedDirector.length === 0 || selectedGenres.length === 0 || selectedActors.length === 0
             }>

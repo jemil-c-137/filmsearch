@@ -7,7 +7,7 @@ import CardContent from '@mui/material/CardContent';
 
 import Typography from '@mui/material/Typography';
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import GenreList from './GenreList';
 import { AllFilms_films } from '../interfaces/AllFilms';
 

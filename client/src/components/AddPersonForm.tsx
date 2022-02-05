@@ -14,9 +14,9 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import Grid from '@mui/material/Grid';
 
-import { TPerson } from '../interfaces/types';
 import { QUERY_FORM_SELECTS } from './FormFields/FormSelects';
 import { TToggleCreatePerson } from './AddFilmForm';
+import { PersonOptionType } from '../interfaces/types';
 
 const ADD_PERSON = gql`
   mutation AddPerson($input: CreatePersonInput!) {
@@ -45,15 +45,23 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ toggle, handleClose }) =
   const { open, name } = toggle;
   const def = { ...defaultValues, name };
   console.log(def, name);
-  const { handleSubmit, control, register } = useForm<TPerson>({
+  const {
+    handleSubmit,
+    control,
+    register,
+    formState: { isValid },
+  } = useForm<PersonOptionType>({
     defaultValues: def,
+    mode: 'onChange',
   });
 
-  const [addPerson, { data, loading, error }] = useMutation(ADD_PERSON, {
+  console.log(isValid, 'isValid');
+
+  const [addPerson] = useMutation(ADD_PERSON, {
     refetchQueries: [{ query: QUERY_FORM_SELECTS }],
   });
 
-  const onSubmit = (data: TPerson) => {
+  const onSubmit = (data: PersonOptionType) => {
     const date = data.birthDate.toISOString();
     const file = data.image[0];
 
@@ -131,7 +139,11 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ toggle, handleClose }) =
               />
             </Grid>
             <Grid item xs={6}>
-              <input type="file" multiple={true} {...register('image')} />
+              <input
+                type="file"
+                multiple={true}
+                {...register('image', { required: { value: true, message: 'please provide a image of the person' } })}
+              />
             </Grid>
             <Grid item xs={12}>
               <Controller
@@ -165,7 +177,9 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ toggle, handleClose }) =
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Add</Button>
+          <Button disabled={!isValid} type="submit">
+            Add
+          </Button>
         </DialogActions>
       </form>
     </Dialog>
