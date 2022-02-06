@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { useQuery, gql } from '@apollo/client';
 import { Box, Grid, Typography } from '@mui/material';
@@ -10,8 +10,8 @@ import { StyledImage } from '../elements';
 import { Film, FilmVariables } from '../interfaces/Film';
 
 const FILM_PAGE_QUERY = gql`
-  query Film($id: ID!) {
-    film(id: $id) {
+  query Film($slug: String!) {
+    film(slug: $slug) {
       title
       year
       description
@@ -53,11 +53,10 @@ const FlexBox = styled(Box)`
 `;
 
 const FilmPage = () => {
-  const {
-    state: { id },
-  } = useLocation<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
+
   const { loading, error, data } = useQuery<Film, FilmVariables>(FILM_PAGE_QUERY, {
-    variables: { id },
+    variables: { slug },
   });
 
   if (loading) return <div>loading...</div>;

@@ -7,10 +7,17 @@ const Query = {
     const films = await FilmsCollection.find().populate('genres');
     return films;
   },
-  film: async (parent, args, { films }) => {
-    const { id } = args;
-    const film = await FilmsCollection.findById(id).populate('director').populate('actors').populate('genres');
+  film: async (_, args) => {
+    const { slug } = args;
+    const film = await FilmsCollection.findOne({ slug }).populate('director').populate('actors').populate('genres');
     return film;
+  },
+  filmsByGenre: async (_, args) => {
+    const { slug } = args;
+    const genre = await GenresCollection.findOne({ slug })
+      .populate('films')
+      .populate({ path: 'films', populate: { path: 'genres' } });
+    return genre.films;
   },
   genres: async () => {
     const allGenres = await GenresCollection.find();
@@ -20,9 +27,9 @@ const Query = {
     const allPersons = await PersonCollection.find();
     return allPersons;
   },
-  person: async (parent, args, { persons }) => {
-    const { id } = args;
-    const res = await PersonCollection.findById(id).populate('directed').populate('acted');
+  person: async (_, args) => {
+    const { slug } = args;
+    const res = await PersonCollection.findOne({ slug }).populate('directed').populate('acted');
     const person = {
       ...res._doc,
       birthDate: res.birthDate.toISOString(),

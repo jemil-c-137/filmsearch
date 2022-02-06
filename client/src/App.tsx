@@ -7,6 +7,7 @@ import PageNotFound from './pages/PageNotFound';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import PersonPage from './pages/PersonPage';
+import FilmsListPage from './pages/FilmsByGenrePage';
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
             </Route>
             <Route exact path="/person/:slug">
               <PersonPage />
+            </Route>
+            <Route exact path="/genres/:slug">
+              <FilmsListPage />
             </Route>
             <Route path="*">
               <PageNotFound />

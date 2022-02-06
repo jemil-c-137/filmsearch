@@ -1,3 +1,5 @@
+const { nanoid } = require('nanoid');
+
 const { PersonCollection } = require('../../data/models/person');
 const { FilmsCollection } = require('../../data/models/film');
 const { GenresCollection } = require('../../data/models/genre');
@@ -8,13 +10,15 @@ const Mutation = {
   addPerson: async (_, args) => {
     const { name, birthDate, image, bio } = args.input;
     const slug = makeSlug(name);
+    const id = nanoid();
+    const slugId = `${slug}-${id}`;
     const file = await uploadFile(image.file);
     const person = await PersonCollection.create({
       name,
       birthDate,
       image: file.secure_url,
       bio,
-      slug,
+      slug: slugId,
     });
     return person
       .save()
@@ -34,14 +38,16 @@ const Mutation = {
     const file = await uploadFile(image);
 
     const slug = makeSlug(input.title);
+    const id = nanoid();
+    const slugId = `${slug}-${id}`;
     try {
       const film = new FilmsCollection({
         ...input,
-        slug,
+        slug: slugId,
         image: file.secure_url,
       });
       film.save().then((res) => {
-        console.log('successfully saved');
+        return res._doc;
       });
       await PersonCollection.updateOne({ _id: { $in: director } }, { $push: { directed: film.id } });
       await PersonCollection.updateMany({ _id: { $in: actors } }, { $push: { acted: film.id } });

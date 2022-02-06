@@ -20,7 +20,7 @@ export interface AddPerson_addPerson {
 }
 
 export interface AddPerson {
-  addPerson: AddPerson_addPerson | null;
+  addPerson: AddPerson_addPerson;
 }
 
 export interface AddPersonVariables {

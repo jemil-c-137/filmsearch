@@ -54,8 +54,9 @@ const typeDefs = gql`
     films: [Film!]!
     genres: [Genre!]!
     persons: [Person!]!
-    film(id: ID!): Film
-    person(id: ID!): Person
+    filmsByGenre(slug: String!): [Film]!
+    film(slug: String!): Film
+    person(slug: String!): Person
   }
 
   input CreatePersonInput {

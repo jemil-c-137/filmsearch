@@ -10,8 +10,8 @@ import { CreateFilmInput } from "./globalTypes";
 // ====================================================
 
 export interface AddFilm_addFilm {
-  __typename: "Success";
-  isSuccess: any | null;
+  __typename: "Film";
+  title: string;
 }
 
 export interface AddFilm {
