@@ -36,5 +36,5 @@ export interface Person {
 }
 
 export interface PersonVariables {
-  id: string;
+  slug: string;
 }

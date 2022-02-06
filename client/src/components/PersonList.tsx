@@ -21,14 +21,7 @@ const PersonList: React.FC<IPersonListProps> = ({ persons }) => {
         <AvatarLabel key={p.id}>
           <Avatar alt={p.name} src={p.image} style={{ marginRight: '10px' }} />
           <Typography color="teal">
-            <Link
-              style={{ textDecoration: 'none', color: 'inherit' }}
-              to={{
-                pathname: `/person/${p.slug}`,
-                state: {
-                  id: p.id,
-                },
-              }}>
+            <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/person/${p.slug}`}>
               {p.name}
             </Link>
           </Typography>

@@ -12,15 +12,8 @@ import GenreList from './GenreList';
 import { AllFilms_films } from '../interfaces/AllFilms';
 
 const FilmCard: React.FC<AllFilms_films> = ({ title, image, rate, genres, duration, year, slug, id }) => {
-
   return (
-    <Link
-      to={{
-        pathname: `/film/${slug}`,
-        state: {
-          id,
-        },
-      }}>
+    <Link to={`/film/${slug}`}>
       <Card sx={{ maxWidth: 345 }} variant="outlined">
         <CardHeader title={title} subheader={year} />
         <CardMedia component="img" height="500" image={image} />

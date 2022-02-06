@@ -35,8 +35,9 @@ const defaultValues = {
   duration: '',
   description: '',
   rate: '',
-  tvShow: false,
   year: new Date(),
+  tvShow: false,
+  yearEnd: new Date(),
   image: undefined,
   actors: [],
   director: '',
@@ -46,7 +47,7 @@ const defaultValues = {
 const ADD_FILM_MUTATION = gql`
   mutation AddFilm($input: CreateFilmInput) {
     addFilm(input: $input) {
-      isSuccess
+      title
     }
   }
 `;
@@ -56,13 +57,14 @@ const AddFilmForm = () => {
     handleSubmit,
     control,
     register,
-    formState: { errors, isValid },
+    watch,
+    formState: { isValid },
   } = useForm<IForm>({
     defaultValues,
     mode: 'onChange',
   });
-
-  useEffect(() => {}, [errors, isValid]);
+  const isTvShow = watch('tvShow', false);
+  const releaseYear = watch('year');
 
   const [openPersonDialog, toggleOpenPersonDialog] = useState<TToggleCreatePerson>({ open: false, name: '' });
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
@@ -91,6 +93,7 @@ const AddFilmForm = () => {
       duration: parseInt(data.duration),
       rate: parseFloat(data.rate),
       year: data.year.getFullYear(),
+      yearEnd: data.yearEnd?.getFullYear(),
       image: file,
       genres: selectedGenres,
       actors: selectedActors,
@@ -212,15 +215,7 @@ const AddFilmForm = () => {
                 )}
               />
             </Stack>
-            <Controller
-              name="tvShow"
-              control={control}
-              render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
-                <FormGroup>
-                  <FormControlLabel control={<Checkbox onChange={onChange} value={value} />} label="TV Show" />
-                </FormGroup>
-              )}
-            />
+
             <Controller
               name="year"
               control={control}
@@ -237,16 +232,47 @@ const AddFilmForm = () => {
                 </LocalizationProvider>
               )}
             />
-            <StyledLabel htmlFor="image">
-              <input
-                type="file"
-                multiple={true}
-                style={{ cursor: 'pointer' }}
-                {...register('image', { required: { value: true, message: 'Please provide a movie poster' } })}
+            <Controller
+              name="tvShow"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                <FormGroup>
+                  <FormControlLabel control={<Checkbox onChange={onChange} value={value} />} label="TV Show" />
+                </FormGroup>
+              )}
+            />
+            {isTvShow ? (
+              <Controller
+                name="yearEnd"
+                control={control}
+                render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      views={['year']}
+                      label="End year"
+                      value={value}
+                      onChange={onChange}
+                      maxDate={new Date()}
+                      minDate={releaseYear}
+                      renderInput={(params) => <TextField {...params} helperText={null} />}
+                    />
+                  </LocalizationProvider>
+                )}
               />
-              Upload poster
-              <ImageIcon sx={{ marginLeft: '1rem' }} />
-            </StyledLabel>
+            ) : null}
+            <div>
+              <Typography>Poster:</Typography>
+              <StyledLabel htmlFor="image">
+                <input
+                  type="file"
+                  multiple={true}
+                  style={{ cursor: 'pointer' }}
+                  {...register('image', { required: { value: true, message: 'Please provide a movie poster' } })}
+                />
+                Upload poster
+                <ImageIcon sx={{ marginLeft: '1rem' }} />
+              </StyledLabel>
+            </div>
 
             <FormSelects
               toggleOpen={handleToggle}

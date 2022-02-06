@@ -4,15 +4,15 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import gql from 'graphql-tag';
-import { useLocation } from 'react-router';
+import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { StyledImage } from '../elements';
 import { Person, Person_person_acted, Person_person_directed } from '../interfaces/Person';
 import { format, differenceInCalendarYears } from 'date-fns';
 
 const PERSON_QUERY = gql`
-  query Person($id: ID!) {
-    person(id: $id) {
+  query Person($slug: String!) {
+    person(slug: $slug) {
       name
       birthDate
       image
@@ -34,10 +34,8 @@ const PERSON_QUERY = gql`
 type PersonFilms = (Person_person_directed | Person_person_acted | null)[];
 
 const PersonPage = () => {
-  const {
-    state: { id },
-  } = useLocation<{ id: string }>();
-  const { error, data, loading } = useQuery<Person>(PERSON_QUERY, { variables: { id } });
+  const { slug } = useParams<{ slug: string }>();
+  const { error, data, loading } = useQuery<Person>(PERSON_QUERY, { variables: { slug } });
 
   if (error) return <div> ...error</div>;
   if (loading) return <div>...loading</div>;
@@ -52,14 +50,7 @@ const PersonPage = () => {
       if (!film) return null;
       return (
         <Typography pl={1} key={film.id}>
-          <Link
-            style={{ textDecoration: 'none', color: 'inherit' }}
-            to={{
-              pathname: `/film/${film.slug}`,
-              state: {
-                id: film.id,
-              },
-            }}>
+          <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/film/${film.slug}`}>
             {film.title}
           </Link>
         </Typography>

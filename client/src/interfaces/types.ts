@@ -12,12 +12,13 @@ export interface IForm {
   duration: string;
   description: string;
   rate: string;
-  tvShow: boolean;
   year: Date;
+  tvShow: boolean;
   image: File[];
   director: string;
   actors: string[];
   genres: string[];
+  yearEnd?: Date;
 }
 
 export interface INewPerson extends FormFieldsValues_persons {

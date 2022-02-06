@@ -50,5 +50,5 @@ export interface Film {
 }
 
 export interface FilmVariables {
-  id: string;
+  slug: string;
 }

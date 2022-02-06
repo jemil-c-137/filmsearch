@@ -39,6 +39,10 @@ const FilmSchema = new Schema({
     type: Boolean,
     required: false,
   },
+  yearEnd: {
+    type: Number,
+    required: false,
+  },
   director: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'Person',
