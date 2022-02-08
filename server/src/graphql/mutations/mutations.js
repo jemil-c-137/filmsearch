@@ -56,6 +56,12 @@ const Mutation = {
       console.log('Error: ', error);
     }
   },
+  deleteFilm: async (_, args) => {
+    const { slug } = args;
+    const film = await FilmsCollection.deleteOne({ slug }).then((res) => console.log('res', res));
+
+    return true;
+  },
 };
 
 module.exports = {
