@@ -9,14 +9,14 @@ const typeDefs = gql`
     title: String!
     director: Person!
     genres: [Genre!]!
-    year: Int!
+    year: String!
     rate: Float!
     description: String!
     slug: String!
     duration: Int!
     actors: [Person!]!
     image: String!
-    yearEnd: Int
+    yearEnd: String
     tvShow: Boolean
     featured: Boolean
   }
@@ -68,12 +68,27 @@ const typeDefs = gql`
 
   input CreateFilmInput {
     title: String!
-    year: Int!
+    year: String!
     rate: Float!
     description: String!
     duration: Int!
     image: Upload!
-    yearEnd: Int
+    yearEnd: String
+    tvShow: Boolean
+    director: ID
+    actors: [ID]
+    genres: [ID]
+  }
+
+  input UpdateFilmInput {
+    slug: String!
+    title: String
+    year: String
+    rate: Float
+    description: String
+    duration: Int
+    image: Upload
+    yearEnd: String
     tvShow: Boolean
     director: ID
     actors: [ID]
@@ -82,8 +97,9 @@ const typeDefs = gql`
 
   type Mutation {
     addPerson(input: CreatePersonInput!): Person!
-    addFilm(input: CreateFilmInput): Film!
+    addFilm(input: CreateFilmInput!): Film!
     deleteFilm(slug: String!): Boolean!
+    updateFilm(input: UpdateFilmInput!): Boolean!
   }
 `;
 

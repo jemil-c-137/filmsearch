@@ -19,5 +19,5 @@ export interface AddFilm {
 }
 
 export interface AddFilmVariables {
-  input?: CreateFilmInput | null;
+  input: CreateFilmInput;
 }

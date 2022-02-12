@@ -9,7 +9,12 @@ const Query = {
   },
   film: async (_, args) => {
     const { slug } = args;
-    const film = await FilmsCollection.findOne({ slug }).populate('director').populate('actors').populate('genres');
+    const res = await FilmsCollection.findOne({ slug }).populate('director').populate('actors').populate('genres');
+    const film = {
+      ...res._doc,
+      year: res.year.toISOString(),
+    };
+    console.log(film, 'film');
     return film;
   },
   filmsByGenre: async (_, args) => {

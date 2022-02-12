@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -7,17 +7,19 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface IModalProps {
   btnText: string;
   modalTitle: string;
+  isOpen: boolean;
+  toggleOpen: (isOpen: boolean) => void;
 }
 
-export const Modal: React.FC<IModalProps> = ({ btnText, modalTitle, children }) => {
-  const [open, setOpen] = React.useState(false);
+export const Modal: React.FC<IModalProps> = ({ btnText, modalTitle, children, isOpen, toggleOpen }) => {
+  console.log(isOpen, 'isOpen');
 
   const handleClickOpen = () => {
-    setOpen(true);
+    toggleOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    toggleOpen(false);
   };
 
   return (
@@ -25,7 +27,7 @@ export const Modal: React.FC<IModalProps> = ({ btnText, modalTitle, children }) 
       <Button variant="outlined" onClick={handleClickOpen}>
         {btnText}
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={isOpen} onClose={handleClose}>
         <DialogTitle>{modalTitle}</DialogTitle>
         <DialogContent>{children}</DialogContent>
       </Dialog>

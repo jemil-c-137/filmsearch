@@ -19,7 +19,7 @@ export interface AllFilms_films {
   title: string;
   id: string;
   genres: AllFilms_films_genres[];
-  year: number;
+  year: string;
   rate: number;
   slug: string;
   duration: number;

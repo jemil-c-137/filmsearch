@@ -33,16 +33,17 @@ export interface Film_film_actors {
 export interface Film_film {
   __typename: "Film";
   title: string;
-  year: number;
+  year: string;
   description: string;
   rate: number;
   duration: number;
   image: string;
+  slug: string;
   genres: Film_film_genres[];
   director: Film_film_director;
   actors: Film_film_actors[];
   tvShow: boolean | null;
-  yearEnd: number | null;
+  yearEnd: string | null;
 }
 
 export interface Film {

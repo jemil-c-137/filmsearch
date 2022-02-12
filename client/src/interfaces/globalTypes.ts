@@ -9,12 +9,12 @@
 
 export interface CreateFilmInput {
   title: string;
-  year: number;
+  year: string;
   rate: number;
   description: string;
   duration: number;
   image: any;
-  yearEnd?: number | null;
+  yearEnd?: string | null;
   tvShow?: boolean | null;
   director?: string | null;
   actors?: (string | null)[] | null;
@@ -26,6 +26,21 @@ export interface CreatePersonInput {
   birthDate: string;
   image: any;
   bio: string;
+}
+
+export interface UpdateFilmInput {
+  slug: string;
+  title?: string | null;
+  year?: string | null;
+  rate?: number | null;
+  description?: string | null;
+  duration?: number | null;
+  image?: any | null;
+  yearEnd?: string | null;
+  tvShow?: boolean | null;
+  director?: string | null;
+  actors?: (string | null)[] | null;
+  genres?: (string | null)[] | null;
 }
 
 //==============================================================

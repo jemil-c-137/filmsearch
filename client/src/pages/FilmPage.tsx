@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { useQuery, gql, useMutation } from '@apollo/client';
+import { format } from 'date-fns';
 import { Box, Grid, Typography, Button } from '@mui/material';
 import styled from '@mui/system/styled';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import GenreList from '../components/GenreList';
 import PersonList from '../components/PersonList';
-import { Flex, StyledImage } from '../elements';
+import { Flex, StyledImage, Modal } from '../elements';
 import { Film, FilmVariables } from '../interfaces/Film';
 import { DeleteFilm, DeleteFilmVariables } from '../interfaces/DeleteFilm';
+import EditFilmForm from '../components/EditFilmForm';
 
 const FILM_PAGE_QUERY = gql`
   query Film($slug: String!) {
@@ -21,6 +23,7 @@ const FILM_PAGE_QUERY = gql`
       rate
       duration
       image
+      slug
       genres {
         name
         slug
@@ -53,12 +56,6 @@ const DELETE_FILM_MUTATION = gql`
 const Bordered = styled('div')`
   border-top: 1px solid #999;
   padding-top: 15px;
-`;
-
-const FlexBox = styled(Box)`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
 `;
 
 const FilmPage = () => {
@@ -97,7 +94,9 @@ const FilmPage = () => {
           </Typography>
 
           <Typography color="secondary" variant="body1">
-            {film.tvShow ? `${film.year} - ${film.yearEnd || 'now'}` : film.year}
+            {film.tvShow
+              ? `${format(new Date(film.year), 'yyyy')} - ${film.yearEnd || 'now'}`
+              : format(new Date(film.year), 'yyyy')}
           </Typography>
 
           <Bordered>
@@ -134,7 +133,8 @@ const FilmPage = () => {
           </Flex>
           <Bordered />
         </Box>
-        <Flex $justify="flex-end" sx={{ py: 2 }}>
+        <Flex $justify="space-between" sx={{ py: 2 }}>
+          <EditFilmForm film={film} />
           <Button onClick={handleClick} size="small" variant="outlined" startIcon={<DeleteForeverIcon />}>
             Delete film
           </Button>

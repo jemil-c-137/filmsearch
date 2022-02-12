@@ -18,11 +18,11 @@ export interface FilmsByGenre_filmsByGenre {
   __typename: "Film";
   title: string;
   rate: number;
-  year: number;
+  year: string;
   image: string;
   duration: number;
   tvShow: boolean | null;
-  yearEnd: number | null;
+  yearEnd: string | null;
   slug: string;
   id: string;
   genres: FilmsByGenre_filmsByGenre_genres[];

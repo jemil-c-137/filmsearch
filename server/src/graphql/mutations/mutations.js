@@ -41,17 +41,23 @@ const Mutation = {
     const id = nanoid();
     const slugId = `${slug}-${id}`;
     try {
-      const film = new FilmsCollection({
+      const film = await new FilmsCollection({
         ...input,
         slug: slugId,
         image: file.secure_url,
       });
-      film.save().then((res) => {
-        return res._doc;
-      });
+
       await PersonCollection.updateOne({ _id: { $in: director } }, { $push: { directed: film.id } });
       await PersonCollection.updateMany({ _id: { $in: actors } }, { $push: { acted: film.id } });
       await GenresCollection.updateMany({ _id: { $in: genres } }, { $push: { films: film.id } });
+      return film
+        .save()
+        .then((res) => {
+          return { ...res._doc, id: res._doc._id };
+        })
+        .catch((err) => {
+          console.log('error', err);
+        });
     } catch (error) {
       console.log('Error: ', error);
     }
@@ -60,6 +66,12 @@ const Mutation = {
     const { slug } = args;
     const film = await FilmsCollection.deleteOne({ slug }).then((res) => console.log('res', res));
 
+    return true;
+  },
+  updateFilm: async (_, args) => {
+    const { input } = args;
+    const { slug } = input;
+    await FilmsCollection.updateOne({ slug }, { $set: { ...input } });
     return true;
   },
 };
