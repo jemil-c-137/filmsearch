@@ -5,6 +5,7 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { INewPerson } from '../../interfaces/types';
 import { FormFieldsValues_persons } from '../../interfaces/FormFieldsValues';
 import { hasOwnProperty } from '../../utils/helpers/typeguards';
+import { Film_film_actors } from '../../interfaces/Film';
 
 const filter = createFilterOptions<INewPerson | FormFieldsValues_persons>();
 
@@ -12,10 +13,11 @@ interface IPersonSelectProps {
   toggleOpen: (isOpen: boolean, name: string) => void;
   persons: FormFieldsValues_persons[];
   addActors: (actors: string[]) => void;
+  defaultValues: Film_film_actors[];
 }
 
-const MultiplePersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addActors }) => {
-  const [value, setValue] = React.useState<(FormFieldsValues_persons | INewPerson)[]>([]);
+const MultiplePersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addActors, defaultValues }) => {
+  const [value, setValue] = React.useState<(FormFieldsValues_persons | INewPerson)[]>(defaultValues);
 
   const setActors = (actors: (FormFieldsValues_persons | INewPerson)[]) => {
     const actorsIds = actors.reduce((prev, current) => {

@@ -17,9 +17,10 @@ export interface AllFilms_films_genres {
 export interface AllFilms_films {
   __typename: "Film";
   title: string;
-  id: string;
+  tvShow: boolean;
+  yearEnd: string | null;
   genres: AllFilms_films_genres[];
-  year: number;
+  year: string;
   rate: number;
   slug: string;
   duration: number;

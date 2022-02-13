@@ -1,16 +1,17 @@
 import React from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import { useQuery, gql, useMutation } from '@apollo/client';
-import { Box, Grid, Typography, Button } from '@mui/material';
+import { useQuery, gql } from '@apollo/client';
+import { Box, Grid, Typography } from '@mui/material';
 import styled from '@mui/system/styled';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import GenreList from '../components/GenreList';
 import PersonList from '../components/PersonList';
 import { Flex, StyledImage } from '../elements';
 import { Film, FilmVariables } from '../interfaces/Film';
-import { DeleteFilm, DeleteFilmVariables } from '../interfaces/DeleteFilm';
+import EditFilmForm from '../components/EditFilmForm';
+import DeleteDialog from '../components/DeleteDialog';
+import { yearsTransform, durationTransform } from '../utils/helpers/transforms';
 
 const FILM_PAGE_QUERY = gql`
   query Film($slug: String!) {
@@ -21,6 +22,7 @@ const FILM_PAGE_QUERY = gql`
       rate
       duration
       image
+      slug
       genres {
         name
         slug
@@ -44,46 +46,23 @@ const FILM_PAGE_QUERY = gql`
   }
 `;
 
-const DELETE_FILM_MUTATION = gql`
-  mutation DeleteFilm($slug: String!) {
-    deleteFilm(slug: $slug)
-  }
-`;
-
 const Bordered = styled('div')`
   border-top: 1px solid #999;
   padding-top: 15px;
 `;
 
-const FlexBox = styled(Box)`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-`;
-
 const FilmPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const history = useHistory();
 
   const { loading, error, data } = useQuery<Film, FilmVariables>(FILM_PAGE_QUERY, {
     variables: { slug },
   });
-
-  const [deleteFilm] = useMutation<DeleteFilm, DeleteFilmVariables>(DELETE_FILM_MUTATION);
 
   if (loading) return <div>loading...</div>;
   if (error) return <div>error...</div>;
   if (!data || !data.film) return <div>no data available</div>;
 
   const { film } = data;
-
-  const handleClick = () => {
-    deleteFilm({ variables: { slug } }).then((res) => {
-      if (res.data?.deleteFilm) {
-        history.push('/');
-      }
-    });
-  };
 
   return (
     <Grid container pr={10} pl={10} pt={10}>
@@ -97,7 +76,7 @@ const FilmPage = () => {
           </Typography>
 
           <Typography color="secondary" variant="body1">
-            {film.tvShow ? `${film.year} - ${film.yearEnd || 'now'}` : film.year}
+            {yearsTransform(film.tvShow, film.year, film.yearEnd)}
           </Typography>
 
           <Bordered>
@@ -115,7 +94,7 @@ const FilmPage = () => {
 
           <Flex $justify="flex-start">
             <Typography>Duration:</Typography>&nbsp;
-            <Typography variant="caption">{film.duration} min</Typography>
+            <Typography variant="caption">{durationTransform(film.duration)}</Typography>
           </Flex>
 
           <Box sx={{ padding: '15px 10px', borderTop: '1px solid #999', borderBottom: '1px solid #999' }}>
@@ -134,10 +113,9 @@ const FilmPage = () => {
           </Flex>
           <Bordered />
         </Box>
-        <Flex $justify="flex-end" sx={{ py: 2 }}>
-          <Button onClick={handleClick} size="small" variant="outlined" startIcon={<DeleteForeverIcon />}>
-            Delete film
-          </Button>
+        <Flex $justify="space-between" sx={{ py: 2 }}>
+          <EditFilmForm film={film} />
+          <DeleteDialog slug={film.slug} />
         </Flex>
       </Grid>
     </Grid>

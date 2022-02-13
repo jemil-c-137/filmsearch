@@ -22,7 +22,6 @@ const QUERY_FILMS_BY_GENRE = gql`
       tvShow
       yearEnd
       slug
-      id
       genres {
         id
         name
@@ -52,7 +51,7 @@ export const FilmsByGenrePage = () => {
         {films.map((film) => {
           if (!film) return null;
           return (
-            <React.Fragment key={film.id}>
+            <React.Fragment key={film.slug}>
               <ListItem alignItems="flex-start" style={{ width: '100%' }}>
                 <FilmListCard {...film} />
               </ListItem>

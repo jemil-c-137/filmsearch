@@ -1,15 +1,21 @@
 const { FilmsCollection } = require('../../data/models/film');
 const { GenresCollection } = require('../../data/models/genre');
 const { PersonCollection } = require('../../data/models/person');
-
+const { filmsWithISOdate } = require('../../utils/helpers');
 const Query = {
   films: async () => {
     const films = await FilmsCollection.find().populate('genres');
-    return films;
+    const preparedFilms = filmsWithISOdate(films);
+    return preparedFilms;
   },
   film: async (_, args) => {
     const { slug } = args;
-    const film = await FilmsCollection.findOne({ slug }).populate('director').populate('actors').populate('genres');
+    const res = await FilmsCollection.findOne({ slug }).populate('director').populate('actors').populate('genres');
+    const film = {
+      ...res._doc,
+      year: res.year.toISOString(),
+      yearEnd: res.yearEnd ? res.yearEnd.toISOString() : null,
+    };
     return film;
   },
   filmsByGenre: async (_, args) => {
@@ -17,7 +23,8 @@ const Query = {
     const genre = await GenresCollection.findOne({ slug })
       .populate('films')
       .populate({ path: 'films', populate: { path: 'genres' } });
-    return genre.films;
+    const films = filmsWithISOdate(genre.films);
+    return films;
   },
   genres: async () => {
     const allGenres = await GenresCollection.find();

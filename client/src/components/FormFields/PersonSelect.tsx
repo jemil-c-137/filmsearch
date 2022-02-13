@@ -5,6 +5,7 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { FormFieldsValues_persons } from '../../interfaces/FormFieldsValues';
 import { hasOwnProperty } from '../../utils/helpers/typeguards';
 import { INewPerson } from '../../interfaces/types';
+import { Film_film_director } from '../../interfaces/Film';
 
 const filter = createFilterOptions<FormFieldsValues_persons | INewPerson | string>();
 
@@ -12,17 +13,17 @@ interface IPersonSelectProps {
   toggleOpen: (isOpen: boolean, name: string) => void;
   persons: FormFieldsValues_persons[];
   addDirector: (director: string) => void;
+  defaultValue: Film_film_director;
 }
 
-const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addDirector }) => {
-  const [value, setValue] = React.useState<FormFieldsValues_persons | null>(null);
+const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addDirector, defaultValue }) => {
+  const [value, setValue] = React.useState<FormFieldsValues_persons | null>(defaultValue);
 
   return (
     <React.Fragment>
       <Autocomplete
         value={value}
         onChange={(_, newValue: FormFieldsValues_persons | INewPerson | string | null) => {
-          console.log(newValue, 'newValue');
           if (newValue === null) return;
           if (typeof newValue === 'string') {
             // timeout to avoid instant validation of the dialog's form.

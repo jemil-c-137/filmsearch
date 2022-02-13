@@ -12,7 +12,7 @@ const FilmSchema = new Schema({
     required: true,
   },
   year: {
-    type: Number,
+    type: Date,
     required: true,
   },
   image: {
@@ -40,7 +40,7 @@ const FilmSchema = new Schema({
     required: false,
   },
   yearEnd: {
-    type: Number,
+    type: Date,
     required: false,
   },
   director: {
