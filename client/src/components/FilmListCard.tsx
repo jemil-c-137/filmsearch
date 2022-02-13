@@ -6,7 +6,7 @@ import { Typography } from '@mui/material';
 
 import { FilmsByGenre_filmsByGenre } from '../interfaces/FilmsByGenre';
 import { StyledImage, Flex, FlexItem } from '../elements';
-import { minutesTransform } from '../utils/helpers/minutesTransform';
+import { durationTransform, yearsTransform } from '../utils/helpers/transforms';
 import GenreList from './GenreList';
 
 const Film = styled('div')({
@@ -25,7 +25,6 @@ const Poster = styled('div')({
 const FilmListCard: React.FC<FilmsByGenre_filmsByGenre> = ({
   title,
   image,
-  id,
   slug,
   duration,
   year,
@@ -48,9 +47,9 @@ const FilmListCard: React.FC<FilmsByGenre_filmsByGenre> = ({
               {title}
             </Typography>{' '}
             <Typography sx={{ display: 'inline-block' }} variant="subtitle1">
-              {tvShow ? `(${year} - ${yearEnd || 'now'})` : `(${year})`}
+              {`(${yearsTransform(tvShow, year, yearEnd)})`}
             </Typography>
-            <Typography>{minutesTransform(duration)}</Typography>
+            <Typography>{durationTransform(duration)}</Typography>
             <GenreList genres={genres} size="small" />
           </FlexItem>
 

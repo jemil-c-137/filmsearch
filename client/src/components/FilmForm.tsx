@@ -56,7 +56,7 @@ const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode }) 
     watch,
     formState: { isValid },
   } = useForm<FilmFormValue>({
-    defaultValues: film,
+    defaultValues: { ...film, stillRunning: film.tvShow && film.yearEnd ? false : true },
     mode: 'onChange',
   });
 
@@ -67,9 +67,10 @@ const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode }) 
   };
 
   const yearValue = film.year ? new Date(film.year) : new Date();
+  const yearEndValue = film.yearEnd ? new Date(film.yearEnd) : new Date();
 
-  const isTvShow = watch('tvShow', false);
-  const releaseYear = watch('year');
+  const isTvShow = watch('tvShow', film.tvShow);
+  const releaseYear = watch('yearInput');
   const stillRunning = watch('stillRunning', true);
 
   const genres = film.genres.map((genre) => genre.id);
@@ -79,8 +80,6 @@ const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode }) 
   const [selectedGenres, setSelectedGenres] = useState<string[]>(genres);
   const [selectedActors, setSelectedActors] = useState<string[]>(actors);
   const [selectedDirector, setSelectedDirector] = useState(film.director.id);
-
-  console.log(film, 'film', isValid, selectedActors, selectedDirector, selectedGenres);
 
   const handleSelectGenre = (genres: string[]) => {
     setSelectedGenres(genres);
@@ -103,11 +102,9 @@ const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode }) 
   const prepareData = (data: FilmFormValue) => {
     const image = data.imageInput[0];
     const year = data.yearInput;
-    const yearEnd = data.yearEndInput;
+    const yearEnd = stillRunning ? null : data.yearEndInput;
     const duration = data.durationInput;
     const rate = data.rateInput;
-
-    console.log(data, 'data');
 
     const payload = {
       title: data.title,
@@ -115,6 +112,7 @@ const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode }) 
       tvShow: data.tvShow,
       image,
       year: year.toISOString(),
+      yearEnd: yearEnd ? yearEnd.toISOString() : null,
       duration: parseInt(duration),
       rate: parseFloat(rate),
       genres: selectedGenres,
@@ -258,19 +256,27 @@ const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode }) 
           <Controller
             name="tvShow"
             control={control}
+            defaultValue={film.tvShow}
             render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
               <FormGroup>
-                <FormControlLabel control={<Checkbox onChange={onChange} value={value} />} label="TV Show" />
+                <FormControlLabel
+                  control={<Checkbox onChange={onChange} value={value} defaultChecked={value} />}
+                  label="TV Show"
+                />
               </FormGroup>
             )}
           />
           {isTvShow ? (
             <Controller
               name="stillRunning"
+              defaultValue={stillRunning}
               control={control}
               render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                 <FormGroup>
-                  <FormControlLabel control={<Checkbox onChange={onChange} value={value} />} label="Still running" />
+                  <FormControlLabel
+                    control={<Checkbox onChange={onChange} value={value} defaultChecked={value} />}
+                    label="Still running"
+                  />
                 </FormGroup>
               )}
             />
@@ -279,6 +285,7 @@ const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode }) 
             <Controller
               name="yearEndInput"
               control={control}
+              defaultValue={yearEndValue}
               render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
@@ -286,7 +293,7 @@ const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode }) 
                     label="End year"
                     value={value}
                     onChange={onChange}
-                    maxDate={new Date().toISOString()}
+                    maxDate={new Date()}
                     minDate={releaseYear}
                     renderInput={(params) => <TextField {...params} helperText={null} />}
                   />

@@ -42,7 +42,7 @@ export interface Film_film {
   genres: Film_film_genres[];
   director: Film_film_director;
   actors: Film_film_actors[];
-  tvShow: boolean | null;
+  tvShow: boolean;
   yearEnd: string | null;
 }
 

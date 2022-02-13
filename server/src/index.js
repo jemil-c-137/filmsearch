@@ -37,7 +37,7 @@ async function startServer() {
   server.applyMiddleware({ app, cors: true });
 
   await mongoose.connect(
-    `mongodb+srv://${process.env.mongoUserName}:${process.env.mongoUserPassword}@cluster0.gglqd.mongodb.net/${process.env.mongoDatabase}?retryWrites=true&w=majority`,
+    `mongodb+srv://${process.env.mongoUserName}:${process.env.mongoUserPassword}@${process.env.mongoCluster}/${process.env.mongoDatabase}?retryWrites=true&w=majority`,
   );
 
   await new Promise((r) => app.listen({ port: 4000 }, r));

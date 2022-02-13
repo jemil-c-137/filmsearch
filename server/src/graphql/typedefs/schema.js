@@ -16,8 +16,8 @@ const typeDefs = gql`
     duration: Int!
     actors: [Person!]!
     image: String!
+    tvShow: Boolean!
     yearEnd: String
-    tvShow: Boolean
     featured: Boolean
   }
 

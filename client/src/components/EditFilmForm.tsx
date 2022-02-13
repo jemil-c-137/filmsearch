@@ -33,8 +33,6 @@ const EditFilmForm: React.FC<IAddFilmFormProps> = ({ film }) => {
 
   const [updateFilm] = useMutation<UpdateFilm, UpdateFilmVariables>(UPDATE_FILM);
 
-  console.log(film, 'film');
-
   const onSubmit = async (updatedFilm: UpdatedFilm) => {
     const payload = {
       ...updatedFilm,
@@ -42,11 +40,10 @@ const EditFilmForm: React.FC<IAddFilmFormProps> = ({ film }) => {
     };
     updateFilm({ variables: { input: payload } })
       .then((res) => {
-        console.log(res.data?.updateFilm, 'res');
         setOpen(false);
       })
       .catch((err) => {
-        console.log('err', err);
+        console.log('error', err);
         setOpen(false);
       });
   };

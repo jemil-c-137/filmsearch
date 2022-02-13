@@ -12,7 +12,6 @@ interface IModalProps {
 }
 
 export const Modal: React.FC<IModalProps> = ({ btnText, modalTitle, children, isOpen, toggleOpen }) => {
-  console.log(isOpen, 'isOpen');
 
   const handleClickOpen = () => {
     toggleOpen(true);

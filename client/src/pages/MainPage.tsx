@@ -8,7 +8,8 @@ const ALL_FILMS = gql`
   query AllFilms {
     films {
       title
-      id
+      tvShow
+      yearEnd
       genres {
         name
         id
@@ -28,11 +29,11 @@ const MainPage = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
-  if (!data?.films) return <div>No data</div>;
 
   return (
     <div>
       <AddFilmForm />
+      {(!data?.films || data.films.length === 0) && <div>No films</div>}
       {data?.films && <FilmsList films={data?.films} />}
     </div>
   );

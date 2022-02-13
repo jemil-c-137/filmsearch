@@ -24,7 +24,6 @@ const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addDi
       <Autocomplete
         value={value}
         onChange={(_, newValue: FormFieldsValues_persons | INewPerson | string | null) => {
-          console.log(newValue, 'newValue');
           if (newValue === null) return;
           if (typeof newValue === 'string') {
             // timeout to avoid instant validation of the dialog's form.

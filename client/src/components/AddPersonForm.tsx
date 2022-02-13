@@ -44,7 +44,6 @@ interface IAddPersonFormProps {
 const AddPersonForm: React.FC<IAddPersonFormProps> = ({ toggle, handleClose }) => {
   const { open, name } = toggle;
   const def = { ...defaultValues, name };
-  console.log(def, name);
   const {
     handleSubmit,
     control,
@@ -55,7 +54,6 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ toggle, handleClose }) =
     mode: 'onChange',
   });
 
-  console.log(isValid, 'isValid');
 
   const [addPerson] = useMutation(ADD_PERSON, {
     refetchQueries: [{ query: QUERY_FORM_SELECTS }],
@@ -112,7 +110,6 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ toggle, handleClose }) =
                         type="text"
                         variant="standard"
                       />
-                      {console.log('value', value)}
                     </>
                   )}
                 />

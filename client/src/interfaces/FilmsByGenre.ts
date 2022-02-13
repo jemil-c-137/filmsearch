@@ -21,10 +21,9 @@ export interface FilmsByGenre_filmsByGenre {
   year: string;
   image: string;
   duration: number;
-  tvShow: boolean | null;
+  tvShow: boolean;
   yearEnd: string | null;
   slug: string;
-  id: string;
   genres: FilmsByGenre_filmsByGenre_genres[];
 }
 
