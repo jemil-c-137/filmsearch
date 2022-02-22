@@ -32,6 +32,7 @@ export interface Film_film_actors {
 
 export interface Film_film {
   __typename: "Film";
+  id: string;
   title: string;
   year: string;
   description: string;

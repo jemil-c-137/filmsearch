@@ -4,30 +4,26 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: AllFilms
+// GraphQL fragment: NewFilm
 // ====================================================
 
-export interface AllFilms_films_genres {
+export interface NewFilm_genres {
   __typename: "Genre";
   name: string;
   id: string;
   slug: string;
 }
 
-export interface AllFilms_films {
+export interface NewFilm {
   __typename: "Film";
   id: string;
   title: string;
   tvShow: boolean;
   yearEnd: string | null;
-  genres: AllFilms_films_genres[];
+  genres: NewFilm_genres[];
   year: string;
   rate: number;
   slug: string;
   duration: number;
   image: string;
-}
-
-export interface AllFilms {
-  films: AllFilms_films[];
 }

@@ -14,7 +14,21 @@ export type TToggleCreatePerson = { open: boolean; name: string };
 
 const UPDATE_FILM = gql`
   mutation UpdateFilm($input: UpdateFilmInput!) {
-    updateFilm(input: $input)
+    updateFilm(input: $input) {
+      title
+      tvShow
+      yearEnd
+      genres {
+        name
+        id
+        slug
+      }
+      year
+      rate
+      slug
+      duration
+      image
+    }
   }
 `;
 

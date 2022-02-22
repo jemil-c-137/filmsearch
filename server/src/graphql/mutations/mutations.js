@@ -52,8 +52,14 @@ const Mutation = {
       await GenresCollection.updateMany({ _id: { $in: genres } }, { $push: { films: film.id } });
       return film
         .save()
-        .then((res) => {
-          return { ...res._doc, id: res._doc._id };
+        .then(async (res) => {
+          await res.populate('genres');
+          return {
+            ...res._doc,
+            id: res._doc._id,
+            year: film.year.toISOString(),
+            yearEnd: film.yearEnd ? film.yearEnd.toISOString() : null,
+          };
         })
         .catch((err) => {
           console.log('error', err);
