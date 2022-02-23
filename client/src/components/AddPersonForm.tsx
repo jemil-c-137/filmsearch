@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useMutation, gql } from '@apollo/client';
 
@@ -13,6 +13,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import Grid from '@mui/material/Grid';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { QUERY_FORM_SELECTS } from './FormFields/FormSelects';
 import { TToggleCreatePerson } from './AddFilmForm';
@@ -42,6 +43,7 @@ interface IAddPersonFormProps {
 }
 
 const AddPersonForm: React.FC<IAddPersonFormProps> = ({ toggle, handleClose }) => {
+  const [loading, setLoading] = useState(false);
   const { open, name } = toggle;
   const def = { ...defaultValues, name };
   const {
@@ -54,12 +56,34 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ toggle, handleClose }) =
     mode: 'onChange',
   });
 
-
   const [addPerson] = useMutation(ADD_PERSON, {
-    refetchQueries: [{ query: QUERY_FORM_SELECTS }],
+    //@ts-ignore
+    update(cache, { data: { addPerson } }) {
+      cache.modify({
+        fields: {
+          persons(existingPersons = []) {
+            const newPerson = cache.writeFragment({
+              data: addPerson,
+              fragment: gql`
+                fragment NewPerson on Person {
+                  bio
+                  slug
+                  image
+                  birthDate
+                  name
+                  id
+                }
+              `,
+            });
+            return [...existingPersons, newPerson];
+          },
+        },
+      });
+    },
   });
 
   const onSubmit = (data: PersonOptionType) => {
+    setLoading(true);
     const date = data.birthDate.toISOString();
     const file = data.image[0];
 
@@ -71,9 +95,11 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ toggle, handleClose }) =
 
     addPerson({ variables: { input: payload } })
       .then(() => {
+        setLoading(false);
         handleClose();
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
         handleClose();
       });
@@ -173,8 +199,10 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ toggle, handleClose }) =
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button disabled={!isValid} type="submit">
+          <Button onClick={handleClose} disabled={loading}>
+            Cancel
+          </Button>
+          <Button disabled={loading || !isValid} type="submit" endIcon={loading && <CircularProgress />}>
             Add
           </Button>
         </DialogActions>

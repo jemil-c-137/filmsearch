@@ -13,6 +13,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/system';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { Film_film } from '../interfaces/Film';
 import AddPersonForm from './AddPersonForm';
@@ -44,11 +45,12 @@ interface IFormProps {
   mode: 'update' | 'create';
   createFilm?: (data: CreateFilmInput) => Promise<void>;
   updateFilm?: (data: UpdatedFilm) => Promise<void>;
+  loading: boolean;
 }
 
 export type TToggleCreatePerson = { open: boolean; name: string };
 
-const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode }) => {
+const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode, loading }) => {
   const {
     handleSubmit,
     control,
@@ -330,9 +332,14 @@ const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode }) 
           color="secondary"
           type="submit"
           variant="contained"
+          endIcon={loading && <CircularProgress />}
           style={{ marginTop: '1rem' }}
           disabled={
-            !isValid || selectedDirector.length === 0 || selectedGenres.length === 0 || selectedActors.length === 0
+            loading ||
+            !isValid ||
+            selectedDirector.length === 0 ||
+            selectedGenres.length === 0 ||
+            selectedActors.length === 0
           }>
           Save
         </Button>

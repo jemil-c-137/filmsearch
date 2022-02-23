@@ -3,7 +3,7 @@ const { nanoid } = require('nanoid');
 const { PersonCollection } = require('../../data/models/person');
 const { FilmsCollection } = require('../../data/models/film');
 const { GenresCollection } = require('../../data/models/genre');
-const { makeSlug, transformSingleFilm } = require('../../utils/helpers');
+const { makeSlug, transformSingleFilm, getUniqueIds, updateFilmInCollection } = require('../../utils/helpers');
 const { uploadFile } = require('../../utils/cloudinaryUpload');
 
 const Mutation = {
@@ -79,11 +79,39 @@ const Mutation = {
   },
   updateFilm: async (_, args) => {
     const { input } = args;
-    const { slug } = input;
-    const res = await FilmsCollection.findOneAndUpdate({ slug }, { $set: { ...input } }, { returnDocument: 'after' })
+    const { slug, director, actors, genres } = input;
+    const foundFilm = await FilmsCollection.findOne({ slug })
       .populate('genres')
       .populate('director')
       .populate('actors');
+
+    // update director
+    if (foundFilm._doc.director.id !== director) {
+      await PersonCollection.updateOne({ _id: { $in: director } }, { $push: { directed: foundFilm.id } });
+      await PersonCollection.updateOne(
+        { _id: { $in: foundFilm._doc.director.id } },
+        { $pull: { directed: foundFilm.id } },
+      );
+    }
+
+    // update genres
+    const genresIds = getUniqueIds(foundFilm._doc.genres, genres);
+    await updateFilmInCollection(genresIds, GenresCollection, 'films', foundFilm.id, genres);
+
+    //update actors
+    const actorsIds = getUniqueIds(foundFilm._doc.actors, actors);
+    await updateFilmInCollection(actorsIds, PersonCollection, 'acted', foundFilm.id, actors);
+
+    // update film
+    const res = await FilmsCollection.findOneAndUpdate(
+      { _id: { $in: foundFilm.id } },
+      { $set: { ...input } },
+      { returnDocument: 'after' },
+    )
+      .populate('genres')
+      .populate('director')
+      .populate('actors');
+
     const film = transformSingleFilm(res);
     return film;
   },

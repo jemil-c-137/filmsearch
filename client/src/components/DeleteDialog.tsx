@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { gql, useMutation } from '@apollo/client';
 
@@ -9,6 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { DeleteFilm, DeleteFilmVariables } from '../interfaces/DeleteFilm';
 
@@ -38,7 +39,8 @@ interface IDeleteDialogProp {
 }
 
 const DeleteDialog: React.FC<IDeleteDialogProp> = ({ slug }) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -85,7 +87,10 @@ const DeleteDialog: React.FC<IDeleteDialogProp> = ({ slug }) => {
   });
 
   const handleClick = () => {
+    setLoading(true);
     deleteFilm({ variables: { slug } }).then((res) => {
+      setLoading(false);
+      console.log(res, 'response');
       if (res.data?.deleteFilm) {
         history.push('/');
       }
@@ -105,10 +110,13 @@ const DeleteDialog: React.FC<IDeleteDialogProp> = ({ slug }) => {
         <DialogTitle id="alert-dialog-title">{'Delete film?'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">Are you sure you want to delete movie?</DialogContentText>
+          {loading && <CircularProgress />}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClick} autoFocus>
+          <Button disabled={loading} onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button disabled={loading} onClick={handleClick} autoFocus>
             Delete
           </Button>
         </DialogActions>

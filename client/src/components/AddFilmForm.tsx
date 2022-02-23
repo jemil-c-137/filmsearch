@@ -35,6 +35,7 @@ const ADD_FILM_MUTATION = gql`
 
 const AddFilmForm = () => {
   const [isOpen, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleOpen = (isOpen: boolean) => {
     setOpen(isOpen);
@@ -67,7 +68,6 @@ const AddFilmForm = () => {
                 }
               `,
             });
-            console.log('newFilmRef', newFilmRef);
             return [...existingFilms, newFilmRef];
           },
         },
@@ -99,9 +99,11 @@ const AddFilmForm = () => {
   };
 
   const onSubmit = async (payload: CreateFilmInput) => {
+    setLoading(true);
     addFilm({ variables: { input: payload } })
       .then((res) => {
         console.log('response success', res);
+        setLoading(false);
         setOpen(false);
       })
       .catch((res) => {
@@ -115,7 +117,7 @@ const AddFilmForm = () => {
       <Typography variant="h6"> Form Demo </Typography>
 
       <Modal isOpen={isOpen} toggleOpen={toggleOpen} btnText="add film" modalTitle="Add a movie">
-        <FilmForm film={defaultValues} createFilm={onSubmit} mode="create" />
+        <FilmForm film={defaultValues} createFilm={onSubmit} mode="create" loading={loading} />
       </Modal>
     </Paper>
   );

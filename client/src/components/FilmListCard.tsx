@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import styled from '@mui/system/styled';
 
 import { Typography } from '@mui/material';
@@ -33,31 +33,35 @@ const FilmListCard: React.FC<FilmsByGenre_filmsByGenre> = ({
   rate,
   genres,
 }) => {
+  const history = useHistory();
+
   return (
     <Film>
-      <Link to={`/film/${slug}`} style={{ width: '100%' }}>
-        <Flex $justify="space-between" $align="flex-start">
-          <FlexItem>
-            <Poster>
-              <StyledImage src={image} />
-            </Poster>
-          </FlexItem>
-          <FlexItem sx={{ width: '100%', ml: '1rem' }}>
-            <Typography sx={{ display: 'inline-block' }} variant="h6">
-              {title}
-            </Typography>{' '}
-            <Typography sx={{ display: 'inline-block' }} variant="subtitle1">
-              {`(${yearsTransform(tvShow, year, yearEnd)})`}
-            </Typography>
-            <Typography>{durationTransform(duration)}</Typography>
-            <GenreList genres={genres} size="small" />
-          </FlexItem>
-
-          <Typography variant="caption" textAlign="right">
-            {rate}
+      <Flex
+        justify="space-between"
+        align="flex-start"
+        onClick={() => history.push(`/film/${slug}`)}
+        sx={{ cursor: 'pointer' }}>
+        <FlexItem>
+          <Poster>
+            <StyledImage src={image} />
+          </Poster>
+        </FlexItem>
+        <FlexItem sx={{ width: '100%', ml: '1rem' }}>
+          <Typography sx={{ display: 'inline-block' }} variant="h6">
+            {title}
+          </Typography>{' '}
+          <Typography sx={{ display: 'inline-block' }} variant="subtitle1">
+            {`(${yearsTransform(tvShow, year, yearEnd)})`}
           </Typography>
-        </Flex>
-      </Link>
+          <Typography>{durationTransform(duration)}</Typography>
+          <GenreList genres={genres} size="small" />
+        </FlexItem>
+
+        <Typography variant="caption" textAlign="right">
+          {rate}
+        </Typography>
+      </Flex>
     </Film>
   );
 };
