@@ -98,8 +98,8 @@ const typeDefs = gql`
   type Mutation {
     addPerson(input: CreatePersonInput!): Person!
     addFilm(input: CreateFilmInput!): Film!
-    deleteFilm(slug: String!): Boolean!
-    updateFilm(input: UpdateFilmInput!): Boolean!
+    deleteFilm(slug: String!): Film!
+    updateFilm(input: UpdateFilmInput!): Film!
   }
 `;
 

@@ -16,6 +16,7 @@ import { yearsTransform, durationTransform } from '../utils/helpers/transforms';
 const FILM_PAGE_QUERY = gql`
   query Film($slug: String!) {
     film(slug: $slug) {
+      id
       title
       year
       description

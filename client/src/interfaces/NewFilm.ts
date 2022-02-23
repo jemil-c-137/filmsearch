@@ -4,17 +4,17 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: Film
+// GraphQL fragment: NewFilm
 // ====================================================
 
-export interface Film_film_genres {
+export interface NewFilm_genres {
   __typename: "Genre";
   name: string;
   slug: string;
   id: string;
 }
 
-export interface Film_film_director {
+export interface NewFilm_director {
   __typename: "Person";
   name: string;
   slug: string;
@@ -22,7 +22,7 @@ export interface Film_film_director {
   id: string;
 }
 
-export interface Film_film_actors {
+export interface NewFilm_actors {
   __typename: "Person";
   name: string;
   slug: string;
@@ -30,7 +30,7 @@ export interface Film_film_actors {
   id: string;
 }
 
-export interface Film_film {
+export interface NewFilm {
   __typename: "Film";
   id: string;
   title: string;
@@ -40,17 +40,9 @@ export interface Film_film {
   duration: number;
   image: string;
   slug: string;
-  genres: Film_film_genres[];
-  director: Film_film_director;
-  actors: Film_film_actors[];
+  genres: NewFilm_genres[];
+  director: NewFilm_director;
+  actors: NewFilm_actors[];
   tvShow: boolean;
   yearEnd: string | null;
-}
-
-export interface Film {
-  film: Film_film | null;
-}
-
-export interface FilmVariables {
-  slug: string;
 }

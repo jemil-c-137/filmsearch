@@ -15,7 +15,20 @@ export type TToggleCreatePerson = { open: boolean; name: string };
 const ADD_FILM_MUTATION = gql`
   mutation AddFilm($input: CreateFilmInput!) {
     addFilm(input: $input) {
+      id
       title
+      tvShow
+      yearEnd
+      genres {
+        name
+        id
+        slug
+      }
+      year
+      rate
+      slug
+      duration
+      image
     }
   }
 `;
@@ -27,7 +40,40 @@ const AddFilmForm = () => {
     setOpen(isOpen);
   };
 
-  const [addFilm] = useMutation<AddFilm, AddFilmVariables>(ADD_FILM_MUTATION);
+  const [addFilm] = useMutation<AddFilm, AddFilmVariables>(ADD_FILM_MUTATION, {
+    //@ts-ignore
+    update(cache, { data: { addFilm } }) {
+      cache.modify({
+        fields: {
+          films(existingFilms = []) {
+            const newFilmRef = cache.writeFragment({
+              data: addFilm,
+              fragment: gql`
+                fragment NewFilm on Film {
+                  id
+                  title
+                  tvShow
+                  yearEnd
+                  genres {
+                    name
+                    id
+                    slug
+                  }
+                  year
+                  rate
+                  slug
+                  duration
+                  image
+                }
+              `,
+            });
+            console.log('newFilmRef', newFilmRef);
+            return [...existingFilms, newFilmRef];
+          },
+        },
+      });
+    },
+  });
 
   const defaultValues: Film_film = {
     title: '',
@@ -49,6 +95,7 @@ const AddFilmForm = () => {
     },
     genres: [],
     __typename: 'Film',
+    id: '',
   };
 
   const onSubmit = async (payload: CreateFilmInput) => {

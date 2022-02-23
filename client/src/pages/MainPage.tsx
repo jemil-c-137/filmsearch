@@ -7,6 +7,7 @@ import { AllFilms } from '../interfaces/AllFilms';
 const ALL_FILMS = gql`
   query AllFilms {
     films {
+      id
       title
       tvShow
       yearEnd

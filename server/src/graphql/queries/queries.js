@@ -13,6 +13,7 @@ const Query = {
     const res = await FilmsCollection.findOne({ slug }).populate('director').populate('actors').populate('genres');
     const film = {
       ...res._doc,
+      id: res.id,
       year: res.year.toISOString(),
       yearEnd: res.yearEnd ? res.yearEnd.toISOString() : null,
     };
