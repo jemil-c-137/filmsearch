@@ -3,7 +3,7 @@ const { nanoid } = require('nanoid');
 const { PersonCollection } = require('../../data/models/person');
 const { FilmsCollection } = require('../../data/models/film');
 const { GenresCollection } = require('../../data/models/genre');
-const { makeSlug } = require('../../utils/helpers');
+const { makeSlug, transformSingleFilm } = require('../../utils/helpers');
 const { uploadFile } = require('../../utils/cloudinaryUpload');
 
 const Mutation = {
@@ -70,15 +70,22 @@ const Mutation = {
   },
   deleteFilm: async (_, args) => {
     const { slug } = args;
-    const film = await FilmsCollection.deleteOne({ slug }).then((res) => console.log('res', res));
-
-    return true;
+    const res = await FilmsCollection.findOneAndDelete({ slug })
+      .populate('genres')
+      .populate('director')
+      .populate('actors');
+    const film = transformSingleFilm(res);
+    return film;
   },
   updateFilm: async (_, args) => {
     const { input } = args;
     const { slug } = input;
-    await FilmsCollection.updateOne({ slug }, { $set: { ...input } });
-    return true;
+    const res = await FilmsCollection.findOneAndUpdate({ slug }, { $set: { ...input } }, { returnDocument: 'after' })
+      .populate('genres')
+      .populate('director')
+      .populate('actors');
+    const film = transformSingleFilm(res);
+    return film;
   },
 };
 

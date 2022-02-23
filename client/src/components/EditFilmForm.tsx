@@ -15,19 +15,33 @@ export type TToggleCreatePerson = { open: boolean; name: string };
 const UPDATE_FILM = gql`
   mutation UpdateFilm($input: UpdateFilmInput!) {
     updateFilm(input: $input) {
+      id
       title
-      tvShow
-      yearEnd
-      genres {
-        name
-        id
-        slug
-      }
       year
+      description
       rate
-      slug
       duration
       image
+      slug
+      genres {
+        name
+        slug
+        id
+      }
+      director {
+        name
+        slug
+        image
+        id
+      }
+      actors {
+        name
+        slug
+        image
+        id
+      }
+      tvShow
+      yearEnd
     }
   }
 `;
@@ -45,7 +59,53 @@ const EditFilmForm: React.FC<IAddFilmFormProps> = ({ film }) => {
     setOpen(isOpen);
   };
 
-  const [updateFilm] = useMutation<UpdateFilm, UpdateFilmVariables>(UPDATE_FILM);
+  const [updateFilm] = useMutation<UpdateFilm, UpdateFilmVariables>(UPDATE_FILM, {
+    //@ts-ignore
+    update(cache, { data: { updateFilm } }) {
+      cache.modify({
+        fields: {
+          film(existingFilms = []) {
+            console.log('here');
+            const newFilmRef = cache.writeFragment({
+              data: updateFilm,
+              fragment: gql`
+                fragment NewFilm on Film {
+                  id
+                  title
+                  year
+                  description
+                  rate
+                  duration
+                  image
+                  slug
+                  genres {
+                    name
+                    slug
+                    id
+                  }
+                  director {
+                    name
+                    slug
+                    image
+                    id
+                  }
+                  actors {
+                    name
+                    slug
+                    image
+                    id
+                  }
+                  tvShow
+                  yearEnd
+                }
+              `,
+            });
+            return newFilmRef;
+          },
+        },
+      });
+    },
+  });
 
   const onSubmit = async (updatedFilm: UpdatedFilm) => {
     const payload = {

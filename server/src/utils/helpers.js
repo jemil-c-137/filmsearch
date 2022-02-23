@@ -11,7 +11,17 @@ const filmsWithISOdate = (films) =>
     return updatedFilm;
   });
 
+const transformSingleFilm = (film) => {
+  return {
+    ...film._doc,
+    id: film.id,
+    year: film.year.toISOString(),
+    yearEnd: film.yearEnd ? film.yearEnd.toISOString() : null,
+  };
+};
+
 module.exports = {
   makeSlug,
   filmsWithISOdate,
+  transformSingleFilm,
 };

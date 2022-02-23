@@ -14,7 +14,22 @@ import { DeleteFilm, DeleteFilmVariables } from '../interfaces/DeleteFilm';
 
 const DELETE_FILM_MUTATION = gql`
   mutation DeleteFilm($slug: String!) {
-    deleteFilm(slug: $slug)
+    deleteFilm(slug: $slug) {
+      id
+      title
+      tvShow
+      yearEnd
+      genres {
+        name
+        id
+        slug
+      }
+      year
+      rate
+      slug
+      duration
+      image
+    }
   }
 `;
 
@@ -35,7 +50,39 @@ const DeleteDialog: React.FC<IDeleteDialogProp> = ({ slug }) => {
 
   const history = useHistory();
 
-  const [deleteFilm] = useMutation<DeleteFilm, DeleteFilmVariables>(DELETE_FILM_MUTATION);
+  const [deleteFilm] = useMutation<DeleteFilm, DeleteFilmVariables>(DELETE_FILM_MUTATION, {
+    //@ts-ignore
+    update(cache, { data: { deleteFilm } }) {
+      cache.modify({
+        fields: {
+          films(existingFilms = []) {
+            const newFilmRef = cache.writeFragment({
+              data: deleteFilm,
+              fragment: gql`
+                fragment NewFilm on Film {
+                  id
+                  title
+                  tvShow
+                  yearEnd
+                  genres {
+                    name
+                    id
+                    slug
+                  }
+                  year
+                  rate
+                  slug
+                  duration
+                  image
+                }
+              `,
+            });
+            return existingFilms.filter((film: any) => film.__ref !== newFilmRef?.__ref);
+          },
+        },
+      });
+    },
+  });
 
   const handleClick = () => {
     deleteFilm({ variables: { slug } }).then((res) => {
