@@ -9,10 +9,10 @@ import { ThemeProvider } from '@emotion/react';
 import { createUploadLink } from 'apollo-upload-client';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  uri: process.env.REACT_APP_API_URL,
   cache: new InMemoryCache(),
   link: createUploadLink({
-    uri: 'http://localhost:4000/graphql',
+    uri: process.env.REACT_APP_API_URL,
   }),
 });
 
