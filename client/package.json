@@ -18,7 +18,10 @@
     "@types/react-router-dom": "^5.3.1",
     "apollo-upload-client": "^17.0.0",
     "date-fns": "^2.28.0",
+    "express": "^4.17.3",
+    "express-favicon": "^2.0.1",
     "graphql": "^15.8.0",
+    "path": "^0.12.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.25.1",
@@ -28,7 +31,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node server.js",
+    "dev": "react-scripts start",
     "postinstall": "react-scripts build",
     "build": "react-scripts build",
     "test": "react-scripts test",
