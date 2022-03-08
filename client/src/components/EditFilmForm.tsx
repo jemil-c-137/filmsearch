@@ -33,12 +33,32 @@ const UPDATE_FILM = gql`
         slug
         image
         id
+        directed {
+          title
+          id
+          slug
+        }
+        acted {
+          title
+          id
+          slug
+        }
       }
       actors {
         name
         slug
         image
         id
+        acted {
+          title
+          id
+          slug
+        }
+        directed {
+          title
+          id
+          slug
+        }
       }
       tvShow
       yearEnd
@@ -54,6 +74,7 @@ export type UpdatedFilm = Omit<UpdateFilmInput, 'slug'>;
 
 const EditFilmForm: React.FC<IAddFilmFormProps> = ({ film }) => {
   const [isOpen, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleOpen = (isOpen: boolean) => {
     setOpen(isOpen);
@@ -108,15 +129,18 @@ const EditFilmForm: React.FC<IAddFilmFormProps> = ({ film }) => {
   });
 
   const onSubmit = async (updatedFilm: UpdatedFilm) => {
+    setLoading(true);
     const payload = {
       ...updatedFilm,
       slug: film.slug,
     };
     updateFilm({ variables: { input: payload } })
       .then((res) => {
+        setLoading(false);
         setOpen(false);
       })
       .catch((err) => {
+        setLoading(false);
         console.log('error', err);
         setOpen(false);
       });
@@ -125,7 +149,7 @@ const EditFilmForm: React.FC<IAddFilmFormProps> = ({ film }) => {
   return (
     <Paper>
       <Modal isOpen={isOpen} toggleOpen={toggleOpen} btnText="Edit film" modalTitle={`Edit a ${film.title}`}>
-        <FilmForm film={film} updateFilm={onSubmit} mode="update" />
+        <FilmForm film={film} updateFilm={onSubmit} mode="update" loading={loading} />
       </Modal>
     </Paper>
   );

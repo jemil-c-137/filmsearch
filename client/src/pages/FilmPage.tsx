@@ -81,19 +81,19 @@ const FilmPage = () => {
           </Typography>
 
           <Bordered>
-            <Flex $justify="flex-start">
+            <Flex justify="flex-start">
               <Typography variant="body1">Genres: </Typography>
               <GenreList genres={film.genres} />
             </Flex>
           </Bordered>
-          <Flex $justify="flex-start">
+          <Flex justify="flex-start">
             <Typography variant="body1">Rate:</Typography>&nbsp;
             <Typography variant="subtitle2" color="danger">
               {film.rate}
             </Typography>
           </Flex>
 
-          <Flex $justify="flex-start">
+          <Flex justify="flex-start">
             <Typography>Duration:</Typography>&nbsp;
             <Typography variant="caption">{durationTransform(film.duration)}</Typography>
           </Flex>
@@ -104,17 +104,17 @@ const FilmPage = () => {
 
           <Typography>Director</Typography>
 
-          <Flex $justify="flex-start" sx={{ my: 2 }}>
+          <Flex justify="flex-start" sx={{ my: 2 }}>
             <PersonList persons={[film.director]} />
           </Flex>
           <Bordered />
           <Typography>Actors</Typography>
-          <Flex $justify="flex-start" $colGap="1rem" $rowGap=".5rem" $wrap="wrap" sx={{ my: 2 }}>
+          <Flex justify="flex-start" colgap="1rem" rowgap=".5rem" wrap="wrap" sx={{ my: 2 }}>
             <PersonList persons={film.actors} />
           </Flex>
           <Bordered />
         </Box>
-        <Flex $justify="space-between" sx={{ py: 2 }}>
+        <Flex justify="space-between" sx={{ py: 2 }}>
           <EditFilmForm film={film} />
           <DeleteDialog slug={film.slug} />
         </Flex>
