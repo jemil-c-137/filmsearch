@@ -9,6 +9,8 @@ import { Film_film } from '../interfaces/Film';
 import { CreateFilmInput } from '../interfaces/globalTypes';
 import { AddFilm, AddFilmVariables } from '../interfaces/AddFilm';
 import { useState } from 'react';
+import { useNotificationContext } from '../context/NotificationContext';
+import { NotificationType } from '../interfaces/types';
 
 export type TToggleCreatePerson = { open: boolean; name: string };
 
@@ -36,6 +38,7 @@ const ADD_FILM_MUTATION = gql`
 const AddFilmForm = () => {
   const [isOpen, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { notify } = useNotificationContext();
 
   const toggleOpen = (isOpen: boolean) => {
     setOpen(isOpen);
@@ -103,10 +106,16 @@ const AddFilmForm = () => {
     addFilm({ variables: { input: payload } })
       .then((res) => {
         console.log('response success', res);
+        if (notify) {
+          notify({ text: 'Film added', type: NotificationType.SUCCESS });
+        }
         setLoading(false);
         setOpen(false);
       })
       .catch((res) => {
+        if (notify) {
+          notify({ text: 'Error', type: NotificationType.ERROR });
+        }
         console.log('response error', res);
         setOpen(false);
       });
@@ -114,8 +123,6 @@ const AddFilmForm = () => {
 
   return (
     <Paper>
-      <Typography variant="h6"> Form Demo </Typography>
-
       <Modal isOpen={isOpen} toggleOpen={toggleOpen} btnText="add film" modalTitle="Add a movie">
         <FilmForm film={defaultValues} createFilm={onSubmit} mode="create" loading={loading} />
       </Modal>

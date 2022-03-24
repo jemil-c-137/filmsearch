@@ -7,6 +7,7 @@ import './index.css';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { ThemeProvider } from '@emotion/react';
 import { createUploadLink } from 'apollo-upload-client';
+import NotificationProvider from './context/NotificationContext';
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_API_URL,
@@ -20,7 +21,9 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <ApolloProvider client={client}>
-        <App />
+        <NotificationProvider>
+          <App />
+        </NotificationProvider>
       </ApolloProvider>
     </ThemeProvider>
   </React.StrictMode>,

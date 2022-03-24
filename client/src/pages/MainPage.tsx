@@ -33,7 +33,7 @@ const MainPage = () => {
 
   return (
     <div>
-      <AddFilmForm />
+
       {(!data?.films || data.films.length === 0) && <div>No films</div>}
       {data?.films && <FilmsList films={data?.films} />}
     </div>

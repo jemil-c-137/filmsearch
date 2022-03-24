@@ -32,7 +32,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "dev": "react-scripts start",
+    "dev": "PORT=3001 react-scripts start",
     "postinstall": "react-scripts build",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -25,3 +25,9 @@ export interface INewPerson extends FormFieldsValues_persons {
   createWithName: string;
   newPerson: true;
 }
+
+export enum NotificationType {
+  SUCCESS = 'success',
+  ERROR = 'error',
+  WARNING = 'warning',
+}
