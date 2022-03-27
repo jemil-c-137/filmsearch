@@ -40,9 +40,9 @@ async function startServer() {
     `mongodb+srv://${process.env.mongoUserName}:${process.env.mongoUserPassword}@${process.env.mongoCluster}/${process.env.mongoDatabase}?retryWrites=true&w=majority`,
   );
 
-  await new Promise((r) => app.listen({ port: 4000 }, r));
+  await new Promise((r) => app.listen({ port: process.env.PORT || 4000 }, r));
 
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+  console.log(`🚀 Server ready`);
 }
 
 startServer();

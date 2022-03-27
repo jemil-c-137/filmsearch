@@ -12,6 +12,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { DeleteFilm, DeleteFilmVariables } from '../interfaces/DeleteFilm';
+import { useNotificationContext } from '../context/NotificationContext';
+import { NotificationType } from '../interfaces/types';
 
 const DELETE_FILM_MUTATION = gql`
   mutation DeleteFilm($slug: String!) {
@@ -41,6 +43,7 @@ interface IDeleteDialogProp {
 const DeleteDialog: React.FC<IDeleteDialogProp> = ({ slug }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { notify } = useNotificationContext();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -92,6 +95,7 @@ const DeleteDialog: React.FC<IDeleteDialogProp> = ({ slug }) => {
       setLoading(false);
       console.log(res, 'response');
       if (res.data?.deleteFilm) {
+        notify({ text: 'Film deleted', type: NotificationType.SUCCESS });
         history.push('/');
       }
     });

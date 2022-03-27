@@ -1,5 +1,7 @@
 # Filmsearch
 
+link: https://filmsearch-web.herokuapp.com/
+
 ### TO START APPLICATION:
 
 ## Install dependencies and run _server_:
@@ -22,7 +24,7 @@ If you have mongodb database and cloudinary account replace _`******`_ with your
 mongoUserName=filmsearchuser
 mongoUserPassword=filmsearch123
 mongoDatabase=filmsearch
-cluster=cluster0.bbltg.mongodb.net
+mongoCluster=cluster0.bbltg.mongodb.net
 cloudinaryCloudName=it-company-jem
 cloudinaryApiKey=167748971964899
 cloudinaryApiSecret=IQrIVG4O98sd5eLDTUNDO1jsIjs
