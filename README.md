@@ -50,7 +50,7 @@ Open a new terminal and run
 ```
 cd client
 npm install
-npm start
+npm run dev
 ```
 
 Open `localhost:3000` in the browser and start using the app
