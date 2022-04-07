@@ -7,6 +7,18 @@
 // START Enums and Input Objects
 //==============================================================
 
+export enum Order {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+export enum SortingField {
+  duration = "duration",
+  rate = "rate",
+  title = "title",
+  year = "year",
+}
+
 export interface CreateFilmInput {
   title: string;
   year: string;
@@ -26,6 +38,11 @@ export interface CreatePersonInput {
   birthDate: string;
   image: any;
   bio: string;
+}
+
+export interface SortBy {
+  field: SortingField;
+  order: Order;
 }
 
 export interface UpdateFilmInput {

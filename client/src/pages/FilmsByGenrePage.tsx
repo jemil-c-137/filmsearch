@@ -10,6 +10,8 @@ import { Typography } from '@mui/material';
 
 import { FilmsByGenre, FilmsByGenreVariables } from '../interfaces/FilmsByGenre';
 import FilmListCard from '../components/FilmListCard';
+import Loader from '../components/Loader';
+import ErrorMessage from '../components/ErrorMessage';
 
 const QUERY_FILMS_BY_GENRE = gql`
   query FilmsByGenre($slug: String!) {
@@ -34,19 +36,21 @@ const QUERY_FILMS_BY_GENRE = gql`
 export const FilmsByGenrePage = () => {
   const { slug } = useParams<{ slug: string }>();
 
+  const capitalizedSlug = slug.charAt(0).toUpperCase() + slug.slice(1);
+
   const { loading, error, data } = useQuery<FilmsByGenre, FilmsByGenreVariables>(QUERY_FILMS_BY_GENRE, {
     variables: { slug },
   });
 
-  if (loading) return <div>loading</div>;
-  if (error) return <div>error</div>;
-  if (!data || data.filmsByGenre.length === 0) return <div>No films by this genre</div>;
+  if (loading) return <Loader />;
+  if (error) return <ErrorMessage />;
+  if (!data || data.filmsByGenre.length === 0) return <ErrorMessage text="No films by this genre" />;
 
   const films = data.filmsByGenre;
 
   return (
     <div>
-      <Typography>{`Films in genre`}</Typography>
+      <Typography>{`Films in genre ${capitalizedSlug}`}</Typography>
       <List sx={{ width: '100%', maxWidth: '50rem', bgcolor: 'background.paper' }}>
         {films.map((film) => {
           if (!film) return null;

@@ -16,12 +16,42 @@ export interface UpdateFilm_updateFilm_genres {
   id: string;
 }
 
+export interface UpdateFilm_updateFilm_director_directed {
+  __typename: "Film";
+  title: string;
+  id: string;
+  slug: string;
+}
+
+export interface UpdateFilm_updateFilm_director_acted {
+  __typename: "Film";
+  title: string;
+  id: string;
+  slug: string;
+}
+
 export interface UpdateFilm_updateFilm_director {
   __typename: "Person";
   name: string;
   slug: string;
   image: string;
   id: string;
+  directed: (UpdateFilm_updateFilm_director_directed | null)[];
+  acted: (UpdateFilm_updateFilm_director_acted | null)[];
+}
+
+export interface UpdateFilm_updateFilm_actors_acted {
+  __typename: "Film";
+  title: string;
+  id: string;
+  slug: string;
+}
+
+export interface UpdateFilm_updateFilm_actors_directed {
+  __typename: "Film";
+  title: string;
+  id: string;
+  slug: string;
 }
 
 export interface UpdateFilm_updateFilm_actors {
@@ -30,6 +60,8 @@ export interface UpdateFilm_updateFilm_actors {
   slug: string;
   image: string;
   id: string;
+  acted: (UpdateFilm_updateFilm_actors_acted | null)[];
+  directed: (UpdateFilm_updateFilm_actors_directed | null)[];
 }
 
 export interface UpdateFilm_updateFilm {

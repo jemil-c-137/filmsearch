@@ -1,10 +1,20 @@
 const { FilmsCollection } = require('../../data/models/film');
 const { GenresCollection } = require('../../data/models/genre');
 const { PersonCollection } = require('../../data/models/person');
-const { filmsWithISOdate } = require('../../utils/helpers');
+const { filmsWithISOdate, handleFilterBy } = require('../../utils/helpers');
 const Query = {
-  films: async () => {
-    const films = await FilmsCollection.find().populate('genres');
+  films: async (_, { sortBy, filterBy }) => {
+    const sorting = {
+      [sortBy.field]: sortBy.order === 'ASC' ? 1 : -1,
+    };
+
+    const filter = handleFilterBy(filterBy);
+
+    console.log(filterBy, 'filterBy');
+    console.log(filter, 'filter');
+
+    console.log(sorting, 'sortby');
+    const films = await FilmsCollection.find(filter).sort(sorting).populate('genres');
     const preparedFilms = filmsWithISOdate(films);
     return preparedFilms;
   },

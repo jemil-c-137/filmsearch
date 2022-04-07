@@ -41,10 +41,32 @@ const updateFilmInCollection = async (uniqueIds, Collection, fieldToUpdate, film
   });
 };
 
+const handleFilterBy = (filterBy) => {
+  const filter = {};
+  if (typeof filterBy === 'undefined') return filter;
+  if (typeof filterBy.year !== 'undefined') {
+    filter.year = { $gte: new Date(`${filterBy.year.min}-01-01`), $lte: new Date(`${filterBy.year.max}-12-31`) };
+  }
+  if (typeof filterBy.directors !== 'undefined') {
+    filter.director = [...filterBy.directors];
+  }
+  if (typeof filterBy.genres !== 'undefined') {
+    filter.genres = { $in: [...filterBy.genres] };
+  }
+  if (typeof filterBy.tvShow !== 'undefined') {
+    filter.tvShow = filterBy.tvShow;
+  }
+  if (typeof filterBy.rate !== 'undefined') {
+    filter.rate = { $gte: filterBy.rate.min, $lte: filterBy.rate.max };
+  }
+  return filter;
+};
+
 module.exports = {
   makeSlug,
   filmsWithISOdate,
   transformSingleFilm,
   getUniqueIds,
   updateFilmInCollection,
+  handleFilterBy,
 };

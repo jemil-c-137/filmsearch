@@ -12,6 +12,8 @@ import { Film, FilmVariables } from '../interfaces/Film';
 import EditFilmForm from '../components/EditFilmForm';
 import DeleteDialog from '../components/DeleteDialog';
 import { yearsTransform, durationTransform } from '../utils/helpers/transforms';
+import Loader from '../components/Loader';
+import ErrorMessage from '../components/ErrorMessage';
 
 const FILM_PAGE_QUERY = gql`
   query Film($slug: String!) {
@@ -59,9 +61,9 @@ const FilmPage = () => {
     variables: { slug },
   });
 
-  if (loading) return <div>loading...</div>;
-  if (error) return <div>error...</div>;
-  if (!data || !data.film) return <div>no data available</div>;
+  if (loading) return <Loader />;
+  if (error) return <ErrorMessage />;
+  if (!data || !data.film) return <ErrorMessage />;
 
   const { film } = data;
 

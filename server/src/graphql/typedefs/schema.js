@@ -39,19 +39,44 @@ const typeDefs = gql`
     acted: [Film]!
   }
 
-  input FilmOrder {
-    description: Sort
-    title: Sort
-    year: Sort
+  input SortBy {
+    field: SortingField!
+    order: Order!
   }
 
-  enum Sort {
-    asc
-    desc
+  input FilterBy {
+    year: YearRange
+    directors: [ID]
+    genres: [ID]
+    tvShow: Boolean
+    rate: RateRange
+  }
+
+  input YearRange {
+    min: Int!
+    max: Int!
+  }
+
+  input RateRange {
+    min: Float!
+    max: Float!
+  }
+
+
+  enum SortingField {
+    title
+    year
+    rate
+    duration
+  }
+
+  enum Order {
+    ASC
+    DESC
   }
 
   type Query {
-    films: [Film!]!
+    films(sortBy: SortBy!, filterBy: FilterBy): [Film!]!
     genres: [Genre!]!
     persons: [Person!]!
     filmsByGenre(slug: String!): [Film]!
