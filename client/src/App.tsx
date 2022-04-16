@@ -8,30 +8,35 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import PersonPage from './pages/PersonPage';
 import FilmsListPage from './pages/FilmsByGenrePage';
+import { RIGHT_SIDE_MENU_WIDTH } from './utils/helpers/constants';
+import SideMenu from './components/SideMenu';
 
 function App() {
   return (
     <Router>
       <Box>
-        <Container>
+        <Container style={{ paddingLeft: RIGHT_SIDE_MENU_WIDTH, paddingRight: RIGHT_SIDE_MENU_WIDTH, maxWidth: 1800 }}>
           <Header />
-          <Switch>
-            <Route exact path="/">
-              <MainPage />
-            </Route>
-            <Route exact path="/film/:slug">
-              <FilmPage />
-            </Route>
-            <Route exact path="/person/:slug">
-              <PersonPage />
-            </Route>
-            <Route exact path="/genres/:slug">
-              <FilmsListPage />
-            </Route>
-            <Route path="*">
-              <PageNotFound />
-            </Route>
-          </Switch>
+          <SideMenu />
+          <main style={{ paddingTop: '5rem' }}>
+            <Switch>
+              <Route exact path="/">
+                <MainPage />
+              </Route>
+              <Route exact path="/film/:slug">
+                <FilmPage />
+              </Route>
+              <Route exact path="/person/:slug">
+                <PersonPage />
+              </Route>
+              <Route exact path="/genres/:slug">
+                <FilmsListPage />
+              </Route>
+              <Route path="*">
+                <PageNotFound />
+              </Route>
+            </Switch>
+          </main>
         </Container>
       </Box>
     </Router>

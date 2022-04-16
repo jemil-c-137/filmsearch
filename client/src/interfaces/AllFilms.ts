@@ -3,6 +3,8 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { SortBy, FilterBy } from "./globalTypes";
+
 // ====================================================
 // GraphQL query operation: AllFilms
 // ====================================================
@@ -30,4 +32,9 @@ export interface AllFilms_films {
 
 export interface AllFilms {
   films: AllFilms_films[];
+}
+
+export interface AllFilmsVariables {
+  sortBy: SortBy;
+  filterBy?: FilterBy | null;
 }

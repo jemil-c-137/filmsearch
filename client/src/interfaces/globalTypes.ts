@@ -7,6 +7,18 @@
 // START Enums and Input Objects
 //==============================================================
 
+export enum Order {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+export enum SortingField {
+  duration = "duration",
+  rate = "rate",
+  title = "title",
+  year = "year",
+}
+
 export interface CreateFilmInput {
   title: string;
   year: string;
@@ -28,6 +40,24 @@ export interface CreatePersonInput {
   bio: string;
 }
 
+export interface FilterBy {
+  year?: YearRange | null;
+  directors?: (string | null)[] | null;
+  genres?: (string | null)[] | null;
+  tvShow?: boolean | null;
+  rate?: RateRange | null;
+}
+
+export interface RateRange {
+  min: number;
+  max: number;
+}
+
+export interface SortBy {
+  field: SortingField;
+  order: Order;
+}
+
 export interface UpdateFilmInput {
   slug: string;
   title?: string | null;
@@ -41,6 +71,11 @@ export interface UpdateFilmInput {
   director?: string | null;
   actors?: (string | null)[] | null;
   genres?: (string | null)[] | null;
+}
+
+export interface YearRange {
+  min: number;
+  max: number;
 }
 
 //==============================================================

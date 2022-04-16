@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import { StyledImage } from '../elements';
 import { Person, Person_person_acted, Person_person_directed } from '../interfaces/Person';
 import { format, differenceInCalendarYears } from 'date-fns';
+import Loader from '../components/Loader';
+import ErrorMessage from '../components/ErrorMessage';
 
 const PERSON_QUERY = gql`
   query Person($slug: String!) {
@@ -37,9 +39,9 @@ const PersonPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { error, data, loading } = useQuery<Person>(PERSON_QUERY, { variables: { slug } });
 
-  if (error) return <div> ...error</div>;
-  if (loading) return <div>...loading</div>;
-  if (!data || !data.person) return <div> ...no data</div>;
+  if (loading) return <Loader />;
+  if (error) return <ErrorMessage />;
+  if (!data || !data.person) return <ErrorMessage />;
 
   const { person } = data;
 

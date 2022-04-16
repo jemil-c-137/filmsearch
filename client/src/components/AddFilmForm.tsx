@@ -114,7 +114,7 @@ const AddFilmForm = () => {
       })
       .catch((res) => {
         if (notify) {
-          notify({ text: 'Error', type: NotificationType.ERROR });
+          notify({ text: 'Film adding failed', type: NotificationType.ERROR });
         }
         console.log('response error', res);
         setOpen(false);

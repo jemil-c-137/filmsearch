@@ -9,6 +9,8 @@ import { Film_film } from '../interfaces/Film';
 import { UpdateFilmInput } from '../interfaces/globalTypes';
 import { UpdateFilm, UpdateFilmVariables } from '../interfaces/UpdateFilm';
 import { useState } from 'react';
+import { useNotificationContext } from '../context/NotificationContext';
+import { NotificationType } from '../interfaces/types';
 
 export type TToggleCreatePerson = { open: boolean; name: string };
 
@@ -75,6 +77,7 @@ export type UpdatedFilm = Omit<UpdateFilmInput, 'slug'>;
 const EditFilmForm: React.FC<IAddFilmFormProps> = ({ film }) => {
   const [isOpen, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { notify } = useNotificationContext();
 
   const toggleOpen = (isOpen: boolean) => {
     setOpen(isOpen);
@@ -138,11 +141,13 @@ const EditFilmForm: React.FC<IAddFilmFormProps> = ({ film }) => {
       .then((res) => {
         setLoading(false);
         setOpen(false);
+        notify({text: "Film edited", type: NotificationType.SUCCESS})
       })
       .catch((err) => {
         setLoading(false);
         console.log('error', err);
         setOpen(false);
+        notify({text: "Film editing failed", type: NotificationType.ERROR})
       });
   };
 

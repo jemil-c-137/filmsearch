@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import Notifcation from '../components/Notifcation';
+import NotificationList from '../components/Notifcation';
 import { NotificationType } from '../interfaces/types';
 
 interface IProps {
@@ -15,28 +15,39 @@ export interface INotificationContent {
   type: NotificationType;
 }
 
+export interface INotifcationProps {
+  id: number;
+  show: boolean;
+  content: INotificationContent;
+}
 
 export type NotificationStatuses = 'success' | 'error';
 
 const NotificationContext = createContext<ContextProps>({} as ContextProps);
 
 const NotificationProvider: React.FC<IProps> = ({ children }) => {
-  const [message, setMessage] = useState<INotificationContent | null>(null);
-  const [open, setOpen] = useState(false);
+  const [notificationsList, setNotifications] = useState([] as INotifcationProps[]);
 
   const notify = (content: INotificationContent) => {
-    setMessage(content);
-    setOpen(true);
+    const notification: INotifcationProps = {
+      content: {
+        ...content,
+      },
+      id: notificationsList.length,
+      show: true,
+    };
+    setNotifications((state) => [...notificationsList, notification]);
   };
 
-  const onClose = () => {
-    setOpen(false);
+  const onClose = (id: number) => {
+    const newList = notificationsList.filter((notification) => notification.id !== id);
+    setNotifications(newList);
   };
 
   return (
     <NotificationContext.Provider value={{ notify }}>
       {children}
-      {message && <Notifcation onClose={onClose} message={message} show={open} />}
+      <NotificationList notifications={notificationsList} onClose={onClose} />
     </NotificationContext.Provider>
   );
 };
