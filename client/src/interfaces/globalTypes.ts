@@ -40,6 +40,19 @@ export interface CreatePersonInput {
   bio: string;
 }
 
+export interface FilterBy {
+  year?: YearRange | null;
+  directors?: (string | null)[] | null;
+  genres?: (string | null)[] | null;
+  tvShow?: boolean | null;
+  rate?: RateRange | null;
+}
+
+export interface RateRange {
+  min: number;
+  max: number;
+}
+
 export interface SortBy {
   field: SortingField;
   order: Order;
@@ -58,6 +71,11 @@ export interface UpdateFilmInput {
   director?: string | null;
   actors?: (string | null)[] | null;
   genres?: (string | null)[] | null;
+}
+
+export interface YearRange {
+  min: number;
+  max: number;
 }
 
 //==============================================================

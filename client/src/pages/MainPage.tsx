@@ -13,8 +13,8 @@ import SideMenu from '../components/SideMenu';
 import { useQueriesContext } from '../context/QueriesContext';
 
 export const ALL_FILMS = gql`
-  query AllFilms($sortBy: SortBy!) {
-    films(sortBy: $sortBy) {
+  query AllFilms($sortBy: SortBy!, $filterBy: FilterBy) {
+    films(sortBy: $sortBy, filterBy: $filterBy) {
       id
       title
       tvShow
@@ -34,17 +34,14 @@ export const ALL_FILMS = gql`
 `;
 
 const MainPage = () => {
-  /* const [sortBy, setSortBy] = useState<SortingField>(SortingField.title);
-
-  const handleChange = (event: SelectChangeEvent<SortingField>) => {
-    setSortBy(event.target.value as SortingField);
-  }; */
   const {
-    queryVariables: { sortBy },
+    queryVariables: { sortBy, filterBy },
   } = useQueriesContext();
 
+  console.log(filterBy, 'filter by');
+
   const { loading, error, data } = useQuery<AllFilms, AllFilmsVariables>(ALL_FILMS, {
-    variables: { sortBy: { field: sortBy.field, order: sortBy.order } },
+    variables: { sortBy: { field: sortBy.field, order: sortBy.order }, filterBy },
   });
 
   if (loading) return <Loader />;
@@ -52,23 +49,6 @@ const MainPage = () => {
 
   return (
     <div>
-      <div>
-        <Flex colgap="10px" justify="flex-end">
-          {/*  <h2>All films sorted by</h2>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={sortBy}
-            label="Age"
-            onChange={handleChange}>
-            {Object.keys(SortingField).map((field) => (
-              <MenuItem key={field} value={field}>
-                {field}
-              </MenuItem>
-            ))}
-          </Select> */}
-        </Flex>
-      </div>
       {(!data?.films || data.films.length === 0) && <div>No films</div>}
       {data?.films && <FilmsList films={data?.films} />}
     </div>

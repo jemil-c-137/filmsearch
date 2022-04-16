@@ -1,6 +1,9 @@
 const Person = {
   acted: (parent) => parent.acted, // films person acted in
-  directed: (parent) => parent.directed,
+  directed: (parent) => {
+    console.log('parent', parent.directed);
+    return parent.directed;
+  },
 };
 
 module.exports = {

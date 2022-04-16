@@ -42,7 +42,7 @@ const Query = {
     return allGenres;
   },
   persons: async () => {
-    const allPersons = await PersonCollection.find();
+    const allPersons = await PersonCollection.find().populate('directed');
     return allPersons;
   },
   person: async (_, args) => {
@@ -53,6 +53,10 @@ const Query = {
       birthDate: res.birthDate.toISOString(),
     };
     return person;
+  },
+  directors: async () => {
+    const directors = await PersonCollection.find({ directed: { $exists: true, $not: { $size: 0 } } });
+    return directors;
   },
 };
 

@@ -1,11 +1,6 @@
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import React, { useState, useRef, useEffect } from 'react';
@@ -15,9 +10,22 @@ import { Flex } from '../elements';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/system';
 import useOnClickOutside from '../utils/hooks/useOutsideClick';
-import { useApolloClient } from '@apollo/client';
-import { ALL_FILMS } from '../pages/MainPage';
+import { useQuery, gql } from '@apollo/client';
 import { useQueriesContext } from '../context/QueriesContext';
+import { SideMenuQuery } from '../interfaces/SideMenuQuery';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import Chip from '@mui/material/Chip';
+
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+
+type TFilterFields = 'directros' | 'genres';
 
 const Container = styled('div')`
   width: 120px;
@@ -51,7 +59,34 @@ const Option = styled('div')`
   }
 `;
 
+const SIDE_MENU_QUERY = gql`
+  query SideMenuQuery {
+    genres {
+      slug
+      name
+      id
+    }
+    directors {
+      slug
+      name
+      id
+      image
+    }
+  }
+`;
+
 const SideMenu = () => {
+  const [sortBy, setSortBy] = useState<SortBy>({ field: SortingField.title, order: Order.ASC });
+  const [show, setShow] = useState(false);
+
+  const [expandedFields, setExpandedFields] = useState<TFilterFields[]>([]);
+  const [checkedGenres, setCheckedGenres] = useState<string[]>([]);
+  const [checkedDirectors, setCheckedDirectors] = useState<string[]>([]);
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  const { updateQueryVariables } = useQueriesContext();
+
   const sorting = Object.keys(SortingField).reduce((prev, current) => {
     return [
       ...prev,
@@ -60,14 +95,19 @@ const SideMenu = () => {
     ];
   }, [] as { field: SortingField; order: Order }[]);
 
-  const ref = useRef<HTMLDivElement>(null);
-
-  const { updateQueryVariables } = useQueriesContext();
-
-  const [sortBy, setSortBy] = useState<SortBy>({ field: SortingField.title, order: Order.ASC });
-  const [show, setShow] = useState(false);
-
   useOnClickOutside(ref, () => setShow(false));
+
+  const { loading, error, data } = useQuery<SideMenuQuery>(SIDE_MENU_QUERY);
+
+  console.log(checkedDirectors, 'data');
+
+  const handleClick = (field: TFilterFields) => {
+    if (expandedFields.includes(field)) {
+      setExpandedFields((prevState) => prevState.filter((existingField) => existingField !== field));
+    } else {
+      setExpandedFields((prevState) => [...prevState, field]);
+    }
+  };
 
   const onSortByChange = (sortBy: SortBy) => {
     setSortBy(sortBy);
@@ -82,16 +122,55 @@ const SideMenu = () => {
     </Flex>
   );
 
+  const onGenreClick = (value: string) => {
+    const currentIndex = checkedGenres.indexOf(value);
+    const newChecked = [...checkedGenres];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setCheckedGenres(newChecked);
+  };
+
+  const onDirectorClick = (value: string) => {
+    const currentIndex = checkedDirectors.indexOf(value);
+    const newChecked = [...checkedDirectors];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setCheckedDirectors(newChecked);
+  };
+
+  const applyFilters = () => {
+    updateQueryVariables({
+      filterBy: {
+        ...(checkedGenres.length > 0 && { genres: checkedGenres }),
+        ...(checkedDirectors.length > 0 && { directors: checkedDirectors }),
+      },
+      sortBy,
+    });
+  };
+
   return (
     <Drawer
       sx={{
         width: RIGHT_SIDE_MENU_WIDTH,
+
         flexShrink: 0,
         '& .MuiDrawer-paper': {
           width: RIGHT_SIDE_MENU_WIDTH,
           boxSizing: 'border-box',
           marginTop: HEADER_HEIGHT,
           zIndex: 1000,
+          paddingBottom: HEADER_HEIGHT,
+          overflowY: 'scroll',
         },
       }}
       variant="permanent"
@@ -101,32 +180,86 @@ const SideMenu = () => {
         <Flex direction="column">
           <Typography variant="subtitle1" gutterBottom component="div">
             Sort by:
-            <Container ref={ref}>
-              <Select onClick={(e) => setShow(!show)}>{renderOption(sortBy)}</Select>
-
-              {show && (
-                <Options>
-                  {sorting.map((item) => (
-                    <Option
-                      key={item.field + item.order}
-                      onClick={() => onSortByChange({ field: item.field, order: item.order })}>
-                      {renderOption(item)}
-                    </Option>
-                  ))}
-                </Options>
-              )}
-            </Container>
           </Typography>
+          <Container ref={ref}>
+            <Select onClick={(e) => setShow(!show)}>{renderOption(sortBy)}</Select>
+
+            {show && (
+              <Options>
+                {sorting.map((item) => (
+                  <Option
+                    key={item.field + item.order}
+                    onClick={() => onSortByChange({ field: item.field, order: item.order })}>
+                    {renderOption(item)}
+                  </Option>
+                ))}
+              </Options>
+            )}
+          </Container>
         </Flex>
       </List>
       <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+      <List
+        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+        component="nav"
+        aria-labelledby="nested-list-subheader">
+        <Flex direction="column">
+          <Typography variant="subtitle1" gutterBottom component="div">
+            Filter by:
+          </Typography>
+          <ListItemButton onClick={() => handleClick('genres')}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Genre" />
+            {expandedFields.includes('genres') ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={expandedFields.includes('genres')} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {data?.genres.map((genre) => (
+                <Chip
+                  onClick={() => onGenreClick(genre.id)}
+                  color={checkedGenres.includes(genre.id) ? 'primary' : 'default'}
+                  key={genre.slug}
+                  label={genre.name}
+                  sx={{ m: '5px' }}
+                  size="medium"
+                />
+              ))}
+            </List>
+          </Collapse>
+          <ListItemButton onClick={() => handleClick('directros')}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Directors" />
+            {expandedFields.includes('directros') ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={expandedFields.includes('directros')} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {data?.directors.map((director) => {
+                if (!director) {
+                  return null;
+                } else
+                  return (
+                    <Chip
+                      onClick={() => onDirectorClick(director.id)}
+                      avatar={<Avatar alt={director.name} src={director.image} />}
+                      color={checkedDirectors.includes(director.id) ? 'primary' : 'default'}
+                      key={director.slug}
+                      label={director.name}
+                      sx={{ m: '5px' }}
+                      size="medium"
+                      variant="outlined"
+                    />
+                  );
+              })}
+            </List>
+          </Collapse>
+          <Button onClick={applyFilters} variant="contained">
+            Apply
+          </Button>
+        </Flex>
       </List>
     </Drawer>
   );

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { SortBy, SortingField, Order } from '../interfaces/globalTypes';
+import { SortBy, SortingField, Order, FilterBy } from '../interfaces/globalTypes';
 
 interface IProps {
   children: React.ReactNode;
@@ -7,6 +7,7 @@ interface IProps {
 
 interface IQueryVariables {
   sortBy: SortBy;
+  filterBy?: FilterBy;
 }
 
 interface QueriesContextProps {
@@ -24,7 +25,7 @@ const QueriesProvider: React.FC<IProps> = ({ children }) => {
   } as IQueryVariables);
 
   const updateQueryVariables = (variables: IQueryVariables) => {
-    setQueryVariables(variables);
+    setQueryVariables((prevState) => ({ ...prevState, ...variables }));
   };
 
   return <QueriesContext.Provider value={{ updateQueryVariables, queryVariables }}>{children}</QueriesContext.Provider>;
