@@ -24,8 +24,11 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
+import Slider from '@mui/material/Slider';
+import { yearsToMonths } from 'date-fns';
+import Box from '@mui/material/Box';
 
-type TFilterFields = 'directros' | 'genres';
+type TFilterFields = 'directros' | 'genres' | 'year';
 
 const Container = styled('div')`
   width: 120px;
@@ -76,12 +79,15 @@ const SIDE_MENU_QUERY = gql`
 `;
 
 const SideMenu = () => {
+  const minDistance = 1;
+
   const [sortBy, setSortBy] = useState<SortBy>({ field: SortingField.title, order: Order.ASC });
   const [show, setShow] = useState(false);
 
   const [expandedFields, setExpandedFields] = useState<TFilterFields[]>([]);
   const [checkedGenres, setCheckedGenres] = useState<string[]>([]);
   const [checkedDirectors, setCheckedDirectors] = useState<string[]>([]);
+  const [year, setYear] = React.useState<[number, number]>([2011, 2022]);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -98,8 +104,6 @@ const SideMenu = () => {
   useOnClickOutside(ref, () => setShow(false));
 
   const { loading, error, data } = useQuery<SideMenuQuery>(SIDE_MENU_QUERY);
-
-  console.log(checkedDirectors, 'data');
 
   const handleClick = (field: TFilterFields) => {
     if (expandedFields.includes(field)) {
@@ -135,6 +139,10 @@ const SideMenu = () => {
     setCheckedGenres(newChecked);
   };
 
+  function valuetext(value: number) {
+    return `${value}°C`;
+  }
+
   const onDirectorClick = (value: string) => {
     const currentIndex = checkedDirectors.indexOf(value);
     const newChecked = [...checkedDirectors];
@@ -148,15 +156,34 @@ const SideMenu = () => {
     setCheckedDirectors(newChecked);
   };
 
+  const handleYearChange = (event: Event, newValue: number | number[], activeThumb: number) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (activeThumb === 0) {
+      setYear([Math.min(newValue[0], year[1] - minDistance), year[1]]);
+    } else {
+      setYear([year[0], Math.max(newValue[1], year[0] + minDistance)]);
+    }
+  };
+
   const applyFilters = () => {
+    const yearRange = {
+      min: year[0],
+      max: year[1],
+    };
     updateQueryVariables({
       filterBy: {
         ...(checkedGenres.length > 0 && { genres: checkedGenres }),
         ...(checkedDirectors.length > 0 && { directors: checkedDirectors }),
+        year: yearRange,
       },
       sortBy,
     });
   };
+
+  console.log(year, 'year');
 
   return (
     <Drawer
@@ -255,6 +282,37 @@ const SideMenu = () => {
                   );
               })}
             </List>
+          </Collapse>
+          <ListItemButton onClick={() => handleClick('year')}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Year" />
+            {expandedFields.includes('year') ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={expandedFields.includes('year')} timeout="auto" unmountOnExit>
+            <Box sx={{ width: 100 }}>
+              <Slider
+                getAriaLabel={() => 'Minimum distance shift'}
+                value={year}
+                onChange={handleYearChange}
+                valueLabelDisplay="on"
+                getAriaValueText={valuetext}
+                disableSwap
+                min={1920}
+                max={2022}
+                sx={{
+                  marginBottom: '50px',
+                  '& .MuiSlider-thumb[data-index="0"] .MuiSlider-valueLabel': {
+                    background: '#556cd6',
+                    top: '60px',
+                  },
+                  '& .MuiSlider-thumb[data-index="0"] .MuiSlider-valueLabel:before': {
+                    transform: 'translate(-50%, -300%) rotate(45deg)',
+                  },
+                }}
+              />
+            </Box>
           </Collapse>
           <Button onClick={applyFilters} variant="contained">
             Apply
