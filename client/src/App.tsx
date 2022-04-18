@@ -17,10 +17,11 @@ function App() {
       <Box>
         <Container style={{ paddingLeft: RIGHT_SIDE_MENU_WIDTH, paddingRight: RIGHT_SIDE_MENU_WIDTH, maxWidth: 1800 }}>
           <Header />
-          <SideMenu />
+
           <main style={{ paddingTop: '5rem' }}>
             <Switch>
               <Route exact path="/">
+                <SideMenu />
                 <MainPage />
               </Route>
               <Route exact path="/film/:slug">
