@@ -18,14 +18,21 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import Chip from '@mui/material/Chip';
+import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import Slider from '@mui/material/Slider';
 
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
+import StarIcon from '@mui/icons-material/Star';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import PersonIcon from '@mui/icons-material/Person';
+import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
 
-type TFilterFields = 'directros' | 'genres';
+import Box from '@mui/material/Box';
+
+type TFilterFields = 'directros' | 'genres' | 'year' | 'rate';
 
 const Container = styled('div')`
   width: 120px;
@@ -76,12 +83,17 @@ const SIDE_MENU_QUERY = gql`
 `;
 
 const SideMenu = () => {
+  const minDistance = 1;
+  const currentYear = new Date().getFullYear();
+
   const [sortBy, setSortBy] = useState<SortBy>({ field: SortingField.title, order: Order.ASC });
   const [show, setShow] = useState(false);
 
   const [expandedFields, setExpandedFields] = useState<TFilterFields[]>([]);
   const [checkedGenres, setCheckedGenres] = useState<string[]>([]);
   const [checkedDirectors, setCheckedDirectors] = useState<string[]>([]);
+  const [year, setYear] = useState<[number, number]>([1920, currentYear]);
+  const [rate, setRate] = useState<[number, number]>([1, 10]);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -98,8 +110,6 @@ const SideMenu = () => {
   useOnClickOutside(ref, () => setShow(false));
 
   const { loading, error, data } = useQuery<SideMenuQuery>(SIDE_MENU_QUERY);
-
-  console.log(checkedDirectors, 'data');
 
   const handleClick = (field: TFilterFields) => {
     if (expandedFields.includes(field)) {
@@ -135,6 +145,10 @@ const SideMenu = () => {
     setCheckedGenres(newChecked);
   };
 
+  function valuetext(value: number) {
+    return `${value}°C`;
+  }
+
   const onDirectorClick = (value: string) => {
     const currentIndex = checkedDirectors.indexOf(value);
     const newChecked = [...checkedDirectors];
@@ -148,15 +162,52 @@ const SideMenu = () => {
     setCheckedDirectors(newChecked);
   };
 
+  const changeRange = (
+    range: [number, number],
+    setRange: (range: [number, number]) => void,
+    newValue: number | number[],
+    activeThumb: number,
+  ) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (activeThumb === 0) {
+      setRange([Math.min(newValue[0], range[1] - minDistance), range[1]]);
+    } else {
+      setRange([range[0], Math.max(newValue[1], range[0] + minDistance)]);
+    }
+  };
+
+  const handleYearChange = (event: Event, newValue: number | number[], activeThumb: number) => {
+    changeRange(year, setYear, newValue, activeThumb);
+  };
+
+  const handleRateChange = (event: Event, newValue: number | number[], activeThumb: number) => {
+    changeRange(rate, setRate, newValue, activeThumb);
+  };
+
   const applyFilters = () => {
+    const yearRange = {
+      min: year[0],
+      max: year[1],
+    };
+    const rateRange = {
+      min: rate[0],
+      max: rate[1],
+    };
     updateQueryVariables({
       filterBy: {
         ...(checkedGenres.length > 0 && { genres: checkedGenres }),
         ...(checkedDirectors.length > 0 && { directors: checkedDirectors }),
+        year: yearRange,
+        rate: rateRange,
       },
       sortBy,
     });
   };
+
+  console.log(year, 'year');
 
   return (
     <Drawer
@@ -230,7 +281,7 @@ const SideMenu = () => {
           </Collapse>
           <ListItemButton onClick={() => handleClick('directros')}>
             <ListItemIcon>
-              <InboxIcon />
+              <PersonIcon />
             </ListItemIcon>
             <ListItemText primary="Directors" />
             {expandedFields.includes('directros') ? <ExpandLess /> : <ExpandMore />}
@@ -255,6 +306,70 @@ const SideMenu = () => {
                   );
               })}
             </List>
+          </Collapse>
+          <ListItemButton onClick={() => handleClick('year')}>
+            <ListItemIcon>
+              <CalendarMonthIcon />
+            </ListItemIcon>
+            <ListItemText primary="Year" />
+            {expandedFields.includes('year') ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={expandedFields.includes('year')} timeout="auto" unmountOnExit>
+            <Box sx={{ width: 100 }}>
+              <Slider
+                getAriaLabel={() => 'Minimum distance shift'}
+                value={year}
+                onChange={handleYearChange}
+                valueLabelDisplay="on"
+                getAriaValueText={valuetext}
+                disableSwap
+                min={1920}
+                max={currentYear}
+                sx={{
+                  marginTop: '30px',
+                  marginBottom: '50px',
+                  '& .MuiSlider-thumb[data-index="0"] .MuiSlider-valueLabel': {
+                    background: '#556cd6',
+                    top: '60px',
+                  },
+                  '& .MuiSlider-thumb[data-index="0"] .MuiSlider-valueLabel:before': {
+                    transform: 'translate(-50%, -300%) rotate(45deg)',
+                  },
+                }}
+              />
+            </Box>
+          </Collapse>
+          <ListItemButton onClick={() => handleClick('rate')}>
+            <ListItemIcon>
+              <StarIcon />
+            </ListItemIcon>
+            <ListItemText primary="Rate" />
+            {expandedFields.includes('rate') ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={expandedFields.includes('rate')} timeout="auto" unmountOnExit>
+            <Box sx={{ width: 100 }}>
+              <Slider
+                getAriaLabel={() => 'Minimum distance shift'}
+                value={rate}
+                onChange={handleRateChange}
+                valueLabelDisplay="on"
+                getAriaValueText={valuetext}
+                disableSwap
+                min={1}
+                max={10}
+                sx={{
+                  marginTop: '30px',
+                  marginBottom: '50px',
+                  '& .MuiSlider-thumb[data-index="0"] .MuiSlider-valueLabel': {
+                    background: '#556cd6',
+                    top: '60px',
+                  },
+                  '& .MuiSlider-thumb[data-index="0"] .MuiSlider-valueLabel:before': {
+                    transform: 'translate(-50%, -300%) rotate(45deg)',
+                  },
+                }}
+              />
+            </Box>
           </Collapse>
           <Button onClick={applyFilters} variant="contained">
             Apply
