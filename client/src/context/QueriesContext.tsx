@@ -8,6 +8,7 @@ interface IProps {
 interface IQueryVariables {
   sortBy: SortBy;
   filterBy?: FilterBy;
+
 }
 
 interface QueriesContextProps {

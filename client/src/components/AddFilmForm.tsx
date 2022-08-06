@@ -44,16 +44,16 @@ const AddFilmForm = () => {
     setOpen(isOpen);
   };
 
-  const [addFilm] = useMutation<AddFilm, AddFilmVariables>(ADD_FILM_MUTATION, {
-    //@ts-ignore
+  const [addFilm] = useMutation(ADD_FILM_MUTATION, {
     update(cache, { data: { addFilm } }) {
       cache.modify({
         fields: {
-          films(existingFilms = []) {
+          films(existingFilms) {
+            console.log('existing films', existingFilms);
             const newFilmRef = cache.writeFragment({
               data: addFilm,
               fragment: gql`
-                fragment NewFilm on Film {
+                fragment NewFilm on Films {
                   id
                   title
                   tvShow
@@ -71,7 +71,8 @@ const AddFilmForm = () => {
                 }
               `,
             });
-            return [...existingFilms, newFilmRef];
+            let prevFilms = existingFilms ? existingFilms.films : [];
+            return [...prevFilms, newFilmRef];
           },
         },
       });

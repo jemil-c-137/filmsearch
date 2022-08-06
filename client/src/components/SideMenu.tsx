@@ -3,7 +3,7 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { HEADER_HEIGHT, RIGHT_SIDE_MENU_WIDTH } from '../utils/helpers/constants';
 import { SortingField, Order, SortBy } from '../interfaces/globalTypes';
 import { Flex } from '../elements';
@@ -28,7 +28,6 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import StarIcon from '@mui/icons-material/Star';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PersonIcon from '@mui/icons-material/Person';
-import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
 
 import Box from '@mui/material/Box';
 
@@ -371,7 +370,7 @@ const SideMenu = () => {
               />
             </Box>
           </Collapse>
-          <Button onClick={applyFilters} variant="contained">
+          <Button sx={{ marginTop: '20px' }} onClick={applyFilters} variant="contained">
             Apply
           </Button>
         </Flex>
