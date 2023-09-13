@@ -1,4 +1,4 @@
-import { Paper, Typography } from '@mui/material';
+import { Paper } from '@mui/material';
 
 import { gql, useMutation } from '@apollo/client';
 
@@ -7,7 +7,6 @@ import FilmForm from './FilmForm';
 
 import { Film_film } from '../interfaces/Film';
 import { CreateFilmInput } from '../interfaces/globalTypes';
-import { AddFilm, AddFilmVariables } from '../interfaces/AddFilm';
 import { useState } from 'react';
 import { useNotificationContext } from '../context/NotificationContext';
 import { NotificationType } from '../interfaces/types';

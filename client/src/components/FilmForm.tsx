@@ -250,7 +250,7 @@ const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode, lo
                   value={value}
                   onChange={onChange}
                   maxDate={new Date()}
-                  renderInput={(params) => <TextField {...params} helperText={null} />}
+                  renderInput={(params: object) => <TextField {...params} helperText={null} />}
                 />
               </LocalizationProvider>
             )}
@@ -297,7 +297,7 @@ const FilmForm: React.FC<IFormProps> = ({ film, createFilm, updateFilm, mode, lo
                     onChange={onChange}
                     maxDate={new Date()}
                     minDate={releaseYear}
-                    renderInput={(params) => <TextField {...params} helperText={null} />}
+                    renderInput={(params: object) => <TextField {...params} helperText={null} />}
                   />
                 </LocalizationProvider>
               )}

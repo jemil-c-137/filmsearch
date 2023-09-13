@@ -54,10 +54,10 @@ const MainPage = () => {
     variables: { sortBy: { field: sortBy.field, order: sortBy.order }, filterBy, page: currentPage, limit },
   });
 
+  console.log(error, 'error');
+
   if (loading) return <Loader />;
   if (error) return <ErrorMessage />;
-
-  console.log(data?.films.totalPages, 'totalPages');
 
   return (
     <div>

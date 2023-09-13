@@ -41,8 +41,8 @@ const MultiplePersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, person
           if (newValue.length === 0) return setValue([]);
           const lastElement = newValue[newValue.length - 1];
 
-          if (hasOwnProperty(lastElement, 'newPerson')) {
-            toggleOpen(true, lastElement.createWithName || '');
+          if (hasOwnProperty(lastElement, 'createWithName')) {
+            toggleOpen(true, (lastElement as INewPerson).createWithName || '');
           } else {
             setActors(newValue);
             setValue(newValue);
