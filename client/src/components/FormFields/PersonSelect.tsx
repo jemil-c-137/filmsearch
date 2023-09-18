@@ -31,7 +31,7 @@ const PersonSelect: React.FC<IPersonSelectProps> = ({ toggleOpen, persons, addDi
               toggleOpen(true, newValue);
             });
           } else if (typeof newValue === 'object' && hasOwnProperty(newValue, 'newPerson')) {
-            toggleOpen(true, newValue.createWithName);
+            toggleOpen(true, (newValue as INewPerson).createWithName);
           } else {
             addDirector(newValue.id);
             setValue(newValue);

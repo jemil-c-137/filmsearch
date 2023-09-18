@@ -155,7 +155,7 @@ const AddPersonForm: React.FC<IAddPersonFormProps> = ({ toggle, handleClose }) =
                       mask="__/__/____"
                       inputFormat="dd/MM/yyyy"
                       maxDate={new Date()}
-                      renderInput={(params) => <TextField {...params} helperText={null} />}
+                      renderInput={(params: object) => <TextField {...params} helperText={null} />}
                     />
                   </LocalizationProvider>
                 )}

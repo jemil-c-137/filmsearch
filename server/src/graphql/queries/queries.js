@@ -3,20 +3,25 @@ const { GenresCollection } = require('../../data/models/genre');
 const { PersonCollection } = require('../../data/models/person');
 const { filmsWithISOdate, handleFilterBy } = require('../../utils/helpers');
 const Query = {
-  films: async (_, { sortBy, filterBy }) => {
+  films: async (_, { sortBy, filterBy, page, limit }) => {
     const sorting = {
       [sortBy.field]: sortBy.order === 'ASC' ? 1 : -1,
     };
 
     const filter = handleFilterBy(filterBy);
-
-    console.log(filterBy, 'filterBy');
-    console.log(filter, 'filter');
-
-    console.log(sorting, 'sortby');
-    const films = await FilmsCollection.find(filter).sort(sorting).populate('genres');
+    const totalCollection = await FilmsCollection.find(filter).count();
+    const totalPages = Math.ceil(totalCollection / limit);
+    const films = await FilmsCollection.find(filter)
+      .skip(page * limit)
+      .limit(limit)
+      .sort(sorting)
+      .populate('genres');
     const preparedFilms = filmsWithISOdate(films);
-    return preparedFilms;
+    console.log(totalCollection, 'total entries');
+    return {
+      films: preparedFilms,
+      totalPages,
+    };
   },
   film: async (_, args) => {
     const { slug } = args;

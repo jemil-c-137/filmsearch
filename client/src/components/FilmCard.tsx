@@ -9,10 +9,20 @@ import Typography from '@mui/material/Typography';
 
 import { useHistory } from 'react-router-dom';
 import GenreList from './GenreList';
-import { AllFilms_films } from '../interfaces/AllFilms';
+import { AllFilms_films_films } from '../interfaces/AllFilms';
 import { yearsTransform, durationTransform } from '../utils/helpers/transforms';
 
-const FilmCard: React.FC<AllFilms_films> = ({ title, image, rate, genres, duration, year, slug, yearEnd, tvShow }) => {
+const FilmCard: React.FC<AllFilms_films_films> = ({
+  title,
+  image,
+  rate,
+  genres,
+  duration,
+  year,
+  slug,
+  yearEnd,
+  tvShow,
+}) => {
   const history = useHistory();
 
   return (

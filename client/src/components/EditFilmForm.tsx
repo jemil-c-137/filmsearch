@@ -1,6 +1,6 @@
-import { Paper, Typography } from '@mui/material';
+import { Paper } from '@mui/material';
 
-import { gql, useMutation } from '@apollo/client';
+import { Reference, gql, useMutation } from '@apollo/client';
 
 import { Modal } from '../elements';
 import FilmForm from './FilmForm';
@@ -88,7 +88,7 @@ const EditFilmForm: React.FC<IAddFilmFormProps> = ({ film }) => {
     update(cache, { data: { updateFilm } }) {
       cache.modify({
         fields: {
-          film(existingFilms = []) {
+          film(existingFilms = []): Reference {
             console.log('here');
             const newFilmRef = cache.writeFragment({
               data: updateFilm,
@@ -124,7 +124,7 @@ const EditFilmForm: React.FC<IAddFilmFormProps> = ({ film }) => {
                 }
               `,
             });
-            return newFilmRef;
+            return newFilmRef as Reference;
           },
         },
       });
@@ -141,13 +141,13 @@ const EditFilmForm: React.FC<IAddFilmFormProps> = ({ film }) => {
       .then((res) => {
         setLoading(false);
         setOpen(false);
-        notify({text: "Film edited", type: NotificationType.SUCCESS})
+        notify({ text: 'Film edited', type: NotificationType.SUCCESS });
       })
       .catch((err) => {
         setLoading(false);
         console.log('error', err);
         setOpen(false);
-        notify({text: "Film editing failed", type: NotificationType.ERROR})
+        notify({ text: 'Film editing failed', type: NotificationType.ERROR });
       });
   };
 

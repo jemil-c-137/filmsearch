@@ -39,6 +39,11 @@ const typeDefs = gql`
     acted: [Film]!
   }
 
+  type AllFilms {
+    films: [Film!]
+    totalPages: Int
+  }
+
   input SortBy {
     field: SortingField!
     order: Order!
@@ -62,7 +67,6 @@ const typeDefs = gql`
     max: Float!
   }
 
-
   enum SortingField {
     title
     year
@@ -76,7 +80,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    films(sortBy: SortBy!, filterBy: FilterBy): [Film!]!
+    films(sortBy: SortBy!, page: Int!, limit: Int!, filterBy: FilterBy): AllFilms!
     genres: [Genre!]!
     persons: [Person!]!
     filmsByGenre(slug: String!): [Film]!
