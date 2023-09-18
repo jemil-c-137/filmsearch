@@ -11,10 +11,10 @@ import NotificationProvider from './context/NotificationContext';
 import QueriesProvider from './context/QueriesContext';
 
 const client = new ApolloClient({
-  uri: process.env.REACT_APP_API_URL,
+  uri: 'http://localhost:4000/graphql',
   cache: new InMemoryCache(),
   link: createUploadLink({
-    uri: process.env.REACT_APP_API_URL,
+    uri: 'http://localhost:4000/graphql',
   }),
 });
 
