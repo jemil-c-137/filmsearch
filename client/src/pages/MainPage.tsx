@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import FilmsList from '../components/FilmsList';
-import AddFilmForm from '../components/AddFilmForm';
 import { AllFilms, AllFilmsVariables } from '../interfaces/AllFilms';
 import Loader from '../components/Loader';
 import ErrorMessage from '../components/ErrorMessage';
-import { SortingField, Order } from '../interfaces/globalTypes';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import { Flex } from '../elements';
-import SideMenu from '../components/SideMenu';
 import { useQueriesContext } from '../context/QueriesContext';
 import { Button, Pagination } from '@mui/material';
 
@@ -54,8 +49,6 @@ const MainPage = () => {
     variables: { sortBy: { field: sortBy.field, order: sortBy.order }, filterBy, page: currentPage, limit },
   });
 
-  console.log(error, 'error');
-
   if (loading) return <Loader />;
   if (error) return <ErrorMessage />;
 
@@ -66,12 +59,12 @@ const MainPage = () => {
         <React.Fragment>
           <FilmsList films={data?.films.films} />
           <Flex sx={{ marginTop: '3rem' }} justify="space-evenly">
-            {/*             <Button disabled={currentPage === 0} onClick={onPrev}>
+            <Button disabled={currentPage === 0} onClick={onPrev}>
               prev
             </Button>
             <Button disabled={data?.films.films.length < limit} onClick={onNext}>
               next
-            </Button> */}
+            </Button>
             {data.films.totalPages !== null && (
               <Pagination page={currentPage + 1} onChange={onChange} count={data.films.totalPages} shape="rounded" />
             )}

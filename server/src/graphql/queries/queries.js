@@ -17,7 +17,6 @@ const Query = {
       .sort(sorting)
       .populate('genres');
     const preparedFilms = filmsWithISOdate(films);
-    console.log(totalCollection, 'total entries');
     return {
       films: preparedFilms,
       totalPages,
